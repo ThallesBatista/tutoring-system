@@ -1,0 +1,11 @@
+/home/thalles/dev/student-module-api/src/main/java/br/com/sembous/smconsumerapi/form/LearningPlanForm.java
+/home/thalles/dev/student-module-api/src/main/java/br/com/sembous/smconsumerapi/model/LearningPlanManager.java
+/home/thalles/dev/student-module-api/src/main/java/br/com/sembous/smconsumerapi/model/PersonalInformations.java
+/home/thalles/dev/student-module-api/src/main/java/br/com/sembous/smconsumerapi/model/LearningPlanPieceStatus.java
+/home/thalles/dev/student-module-api/src/main/java/br/com/sembous/smconsumerapi/model/Student.java
+/home/thalles/dev/student-module-api/src/main/java/br/com/sembous/smconsumerapi/gateway/StudentModuleGateway.java
+/home/thalles/dev/student-module-api/src/main/java/br/com/sembous/smconsumerapi/dto/StudentDto.java
+/home/thalles/dev/student-module-api/src/main/java/br/com/sembous/smconsumerapi/form/StudentForm.java
+/home/thalles/dev/student-module-api/src/main/java/br/com/sembous/smconsumerapi/model/LearningPlanPiece.java
+/home/thalles/dev/student-module-api/src/main/java/br/com/sembous/smconsumerapi/model/KnowledgePieceType.java
+/home/thalles/dev/student-module-api/src/main/java/br/com/sembous/smconsumerapi/model/LearningPlanPieceCategory.java
