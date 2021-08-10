@@ -9,9 +9,9 @@ public class LearningPlanManager {
 	private Set<LearningPlan> learningPlans;
 
 	
-//	public LearningPlanManager(Set<LearningPlan> learningPlans) {
-//		this.learningPlans = learningPlans;
-//	}
+	public LearningPlanManager(Set<LearningPlan> learningPlans) {
+		this.learningPlans = learningPlans;
+	}
 	
 	
 	public Optional<LearningPlan> getLearningPlan(Integer id) {
