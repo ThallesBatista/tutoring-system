@@ -11,7 +11,7 @@ public class LearningPlanPieceDto {
 	private Long id;
 	private String type;
 	private Integer expertModuleId;
-	private LearningPlanPieceDto fatherLPP = null;
+	private LearningPlanPieceSimpleDto fatherLPP = null;
 	private List<LearningPlanPieceDto> childLPP;
 	private String category; 
 	private String status;
@@ -23,7 +23,7 @@ public class LearningPlanPieceDto {
 		this.type = learningPlanGraph.getType().toString();
 		this.expertModuleId = learningPlanGraph.getExpertModuleId();
 		Optional<LearningPlanPiece> optional = learningPlanGraph.getFatherLPP();
-		if (optional.isPresent()) this.fatherLPP = new LearningPlanPieceDto(optional.get());
+		if (optional.isPresent()) this.fatherLPP = new LearningPlanPieceSimpleDto(optional.get());
 		this.childLPP = learningPlanGraph.getChildLPP().stream().map(LearningPlanPieceDto::new).collect(Collectors.toList());
 		this.category = learningPlanGraph.getCategory().toString();
 		this.status = learningPlanGraph.getStatus().toString();
@@ -40,7 +40,7 @@ public class LearningPlanPieceDto {
 	public Integer getExpertModuleId() {
 		return expertModuleId;
 	}
-	public LearningPlanPieceDto getFatherLPP() {
+	public LearningPlanPieceSimpleDto getFatherLPP() {
 		return fatherLPP;
 	}
 	public List<LearningPlanPieceDto> getChildLPP() {
