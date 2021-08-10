@@ -1,0 +1,88 @@
+<html>
+<head th:replace="~{base :: head}"></head>
+<body onload="onLoad()">
+	<div th:replace="~{base :: logo}"></div>
+	<div th:replace="~{base :: navbar('content')}"></div>
+	<div class="container" id="core">
+	
+	
+		<ul class="nav nav-tabs nav-fill alert-dark">
+			<div v-for="topic in topics">
+				<li class="nav-item">
+		    		<a v-on:click="myfunc(topic)" v-bind:class="{'active':topic.active === true}" class="btn btn-link nav-link mr-5 ml-5">{{topic.name}}</a>
+		   		</li>
+			</div>
+		</ul>
+
+		<div class="accordion accordion-flush" id="accordionFlushExample">
+			<div class="accordion-item" v-for="objective in pedagogicalObjectives">
+				<h2 class="accordion-header" v-bind:id="('flush-head'+objective.id)">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse" v-bind:data-bs-target="('#flush-collapse'+objective.id)"
+						aria-expanded="false" v-bind:aria-controls="('flush-collapse'+objective.id)">
+						{{objective.name}}</button>
+				</h2>
+				<div v-bind:id="('flush-collapse'+objective.id)" class="accordion-collapse collapse"
+					v-bind:aria-labelledby="('flush-head'+objective.id)"
+					data-bs-parent="#accordionFlushExample">
+					<div class="accordion-body">
+						<ul class="list-group" v-for="notion in objective.notions">
+							<li class="list-group-item">{{notion.name}}</li>
+						</ul>
+						<button v-bind:class="{'disabled':!userIsLogged}" v-on:click="selectObjective(objective)" type="button" class="btn btn-success btn-sm mt-3">Definir como Objetivo</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+	</div>
+	<script>
+			function onLoad() {
+				var app = new Vue(
+				{
+					el : '#core',
+					data : {topics : [], pedagogicalObjectives : [], userIsLogged : false},
+					mounted () {
+						axios
+					      .get('http://localhost:8081/topic/getTrees?until=NOTION')
+					      .then(response => {
+					    	  	response.data.forEach(topic =>{
+					    	  		topic.active = false;
+					    	  	});
+					    	 	this.topics = response.data;
+					    	 	//this.topics[0].active = true;
+					    	 	this.myfunc(this.topics[0], this.pedagogicalObjectives);
+					    	});
+						axios
+					      .get('http://localhost:8083/api/user/isLogged')
+					      .then(response => {
+					    	  	this.userIsLogged = response.data;
+					    	});
+						
+					},
+					methods: {
+						myfunc: function(topic) {
+							this.topics.forEach(topic => {topic.active = false;});
+						   	topic.active=true;
+							this.pedagogicalObjectives = topic.pedagogicalObjectives;
+						},
+						selectObjective: function(objective) {
+							axios
+						      .post('http://localhost:8083/selectObjective', {
+						    	  objectiveId: objective.id
+						      })
+						      .then(response => {window.location.href = 'http://localhost:8083/' + response.data;})
+						      .catch(error => {});
+							//console.log('http://localhost:8083/' + redirectUrl);
+							//window.location.href = 'http://localhost:8083/' + redirectUrl;
+						}
+					}
+				});
+			}
+		</script>
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+{
+	"content":[
+		{"type":"TITLE","content":"Vamos começar?"},
+		{"type":"PARAGRAPH","content":"Parece que você ainda não escolheu um objetivo de aprendizado. O que acha de começar agora?"},
+		{"type":"IMAGE","content":"imagem"}
+	],
+	"specialFlag":"NEW_STUDENT"
+}

@@ -1,0 +1,44 @@
+<html>
+<head th:replace="~{base :: head}"></head>
+<body>
+	<div th:replace="~{base :: logo}"></div>
+	<div th:replace="~{base :: navbar('null')}"></div>
+	
+	<div class="container">
+		
+		<div class="card mb-3">
+			<form th:action="@{/signup}" class="card-body" method="post">
+			
+				<div class="row justify-content-between">
+					<div class="form-group col-6">
+						<label for="firstName">Nome</label>
+						<input name="firstName" type="text"  class="form-control" placeholder="Nome"/>
+					</div>
+					<div class="form-group col-6">
+						<label for="lastName">Sobrenome</label>
+						<input name="lastName" type="text" class="form-control" placeholder="Sobrenome"/>
+					</div>
+					<div class="form-group col-6">
+						<label for="email">Email</label>
+						<input name="email" type="email"  class="form-control" placeholder="jdklsajfsa@dsads.dsa"/>
+					</div>
+				</div>
+				
+				<div class="row justify-content-between">
+					<div class="form-group col-6">
+						<label for="username">Usuário</label>
+						<input type="text" name="username" class="form-control" placeholder="nome de usuario"/>
+					</div>
+					<div class="form-group col-6">
+						<label for="password">Senha</label>
+						<input type="password" name="password" class="form-control" placeholder="senha"/>
+					</div>
+				</div>
+				
+				<button class="btn btn-primary" type="submit">Cadastrar</button>
+			</form>
+		</div>
+		
+	</div>
+</body>
+</html>
