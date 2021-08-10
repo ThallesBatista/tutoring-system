@@ -1,0 +1,122 @@
+<div th:fragment="learningPlanPieceStructure(pieces)">
+	<div th:each="piece : ${pieces}">
+	
+		<div th:if="${piece.type.toString.equals('PEDAGOGICAL_OBJECTIVE')} or ${piece.type.toString.equals('NOTION')} or ${piece.type.toString.equals('CONCEPT')}"> 
+			<div th:replace="~{dashboard/aux :: notActivity(piece=${piece})}"/>
+		</div>
+		<div th:if="${!piece.type.toString.equals('PEDAGOGICAL_OBJECTIVE')} and ${!piece.type.toString.equals('NOTION')} and ${!piece.type.toString.equals('CONCEPT')}"> 
+			<div th:replace="~{dashboard/aux :: activity(piece=${piece})}"/>
+		</div>
+		
+	</div>
+</div>
+
+<div th:fragment="activity(piece)">
+
+
+	<div th:switch="${piece.status.toString}">
+		<div th:case="'BLOCKED'">
+			<div class="list-group-item list-group-item-danger">
+				<div class="d-flex w-100 justify-content-between align-items-center row mb-1">
+			    	<div class="card-text col">
+				      	<label th:for="'name' + ${piece.type.toString} + ${piece.expertModuleId}" th:text="${kpt2str.get(piece.type)} + ': &nbsp'"/>
+						<span th:id="'name' + ${piece.type.toString} + ${piece.expertModuleId}" th:text="${piece.name}"/>
+					</div>
+					<span class="badge bg-danger col-1">Bloqueado</span>
+			    </div>
+			    <p  th:if="${piece.type.toString.equals('DIAGNOSTIC_EVALUATION_ACTIVITY')} or ${piece.type.toString.equals('FORMATIVE_EVALUATION_ACTIVITY')} or ${piece.type.toString.equals('SUMATIVE_EVALUATION_ACTIVITY')}"
+			    class="mb-1 card-text col-3" th:text="'Score: &nbsp' + ${piece.score}"></p>
+			    <p  th:unless="${piece.type.toString.equals('DIAGNOSTIC_EVALUATION_ACTIVITY')} or ${piece.type.toString.equals('FORMATIVE_EVALUATION_ACTIVITY')} or ${piece.type.toString.equals('SUMATIVE_EVALUATION_ACTIVITY')}"
+			    class="mb-1 card-text col-3" th:text="'&nbsp'"></p>
+	    	</div>
+		</div>
+		<div th:case="'DONE'">
+			<div class="list-group-item list-group-item-success">
+				<div class="d-flex w-100 justify-content-between align-items-center row mb-1">
+			    	<div class="card-text col">
+				      	<label th:for="'name' + ${piece.type.toString} + ${piece.expertModuleId}" th:text="${kpt2str.get(piece.type)} + ': &nbsp'"/>
+						<span th:id="'name' + ${piece.type.toString} + ${piece.expertModuleId}" th:text="${piece.name}"/>
+					</div>
+					<span class="badge bg-success col-1">Concluído</span>
+			    </div>
+			    <p  th:if="${piece.type.toString.equals('DIAGNOSTIC_EVALUATION_ACTIVITY')} or ${piece.type.toString.equals('FORMATIVE_EVALUATION_ACTIVITY')} or ${piece.type.toString.equals('SUMATIVE_EVALUATION_ACTIVITY')}"
+			    class="mb-1 card-text col-3" th:text="'Score: &nbsp' + ${piece.score}"></p>
+			    <p  th:unless="${piece.type.toString.equals('DIAGNOSTIC_EVALUATION_ACTIVITY')} or ${piece.type.toString.equals('FORMATIVE_EVALUATION_ACTIVITY')} or ${piece.type.toString.equals('SUMATIVE_EVALUATION_ACTIVITY')}"
+			    class="mb-1 card-text col-3" th:text="'&nbsp'"></p>
+	    	</div>
+		</div>
+		<div th:case="*">
+			<div class="list-group-item list-group-item-warning">
+				<div class="d-flex w-100 justify-content-between align-items-center row mb-1">
+			    	<div class="card-text col">
+				      	<label th:for="'name' + ${piece.type.toString} + ${piece.expertModuleId}" th:text="${kpt2str.get(piece.type)} + ': &nbsp'"/>
+						<span th:id="'name' + ${piece.type.toString} + ${piece.expertModuleId}" th:text="${piece.name}"/>
+					</div>
+			    </div>
+			    <p  th:if="${piece.type.toString.equals('DIAGNOSTIC_EVALUATION_ACTIVITY')} or ${piece.type.toString.equals('FORMATIVE_EVALUATION_ACTIVITY')} or ${piece.type.toString.equals('SUMATIVE_EVALUATION_ACTIVITY')}"
+			    class="mb-1 card-text col-3" th:text="'Score: &nbsp' + ${piece.score}"></p>
+			    <p  th:unless="${piece.type.toString.equals('DIAGNOSTIC_EVALUATION_ACTIVITY')} or ${piece.type.toString.equals('FORMATIVE_EVALUATION_ACTIVITY')} or ${piece.type.toString.equals('SUMATIVE_EVALUATION_ACTIVITY')}"
+			    class="mb-1 card-text col-3" th:text="'&nbsp'"></p>
+	    	</div>
+		</div>
+	</div>
+  
+</div>
+
+<div th:fragment="notActivity(piece)">
+	
+	<div class="accordion card" th:id="'accordion' + ${piece.type.toString} + ${piece.expertModuleId}">
+							    			
+			<div class="accordion-item">
+				<div class="accordion-header" th:id="'flush-Heading' + ${piece.type.toString} + ${piece.expertModuleId}">
+				
+					<div th:switch="${piece.status.toString}">					
+    					<div th:case="'BLOCKED'">
+							<button class="accordion-button collapsed col-12 btn-danger" type="button" data-bs-toggle="collapse"
+							th:data-bs-target="'#flush-Collapse' + ${piece.type.toString} + ${piece.expertModuleId}">
+								<label th:for="'name' + ${piece.type.toString} + ${piece.expertModuleId}" th:text="${kpt2str.get(piece.type)} + ': &nbsp'"/>
+								<span th:id="'name' + ${piece.type.toString} + ${piece.expertModuleId}" th:text="${piece.name}"/>
+								<span class="badge bg-danger ms-1">Bloqueado</span>
+							</button>
+    					</div>
+    					<div th:case="'DONE'">
+    						<button class="accordion-button collapsed col-12 btn-success" type="button" data-bs-toggle="collapse"
+							th:data-bs-target="'#flush-Collapse' + ${piece.type.toString} + ${piece.expertModuleId}">
+								<label th:for="'name' + ${piece.type.toString} + ${piece.expertModuleId}" th:text="${kpt2str.get(piece.type)} + ': &nbsp'"/>
+								<span th:id="'name' + ${piece.type.toString} + ${piece.expertModuleId}" th:text="${piece.name}"/>
+								<span class="badge bg-success ms-1">Concluído</span>
+							</button>
+    					</div>
+    					<div th:case="*">
+    						<button class="accordion-button collapsed col-12 btn-warning" type="button" data-bs-toggle="collapse"
+							th:data-bs-target="'#flush-Collapse' + ${piece.type.toString} + ${piece.expertModuleId}">
+								<label th:for="'name' + ${piece.type.toString} + ${piece.expertModuleId}" th:text="${kpt2str.get(piece.type)} + ': &nbsp'"/>
+								<span th:id="'name' + ${piece.type.toString} + ${piece.expertModuleId}" th:text="${piece.name}"/>
+							</button>
+    					</div>    					
+					</div>
+					
+				</div>
+			</div>
+			
+			<div th:id="'flush-Collapse' + ${piece.type.toString} + ${piece.expertModuleId}" class="accordion-collapse collapse" 
+			th:data-bs-parent="'#accordion' + ${piece.type.toString} + ${piece.expertModuleId}">
+				<div class="accordion-body">
+					<div class="card-body mb-3 row d-flex justify-content-between">
+						<div class="card-text col-3" th:text="'Score: &nbsp' + ${piece.score}"></div>
+						<div class="col">
+						<div class="progress">
+	  						<div class="progress-bar bg-success" role="progressbar"
+	  							th:style="'width: ' + ${100*piece.getProgress} + '%'" 
+	  							th:text="${100*piece.getProgress} + '%'">
+	  						</div>
+  						</div>
+  						</div>
+					</div>
+					<div th:if="%{!piece.getChild.isEmpty}" th:replace="~{dashboard/aux :: learningPlanPieceStructure(pieces=${piece.getChildLPP})}"></div>
+				</div>
+			</div>							    		
+							    		
+		</div>
+
+</div>

@@ -1,0 +1,258 @@
+<html>
+<head th:replace="~{base :: head}"/>
+<body onload="onLoad()">
+	<div th:replace="~{base :: logo}"/>
+	<div th:replace="~{base :: navbar('learn')}"/>
+	<div class="container" id="core">
+		
+		
+		<div v-for="content in primaryContents">
+		
+			<div v-if="content['type']=='TITLE'" class="mt-4"><h4>{{content["content"]}}</h4></div>
+			<div v-if="content['type']=='SUBTITLE'" class="mb-2"><small class="text-muted">{{content["content"]}}</small></div>
+			<div v-if="content['type']=='PARAGRAPH'"><p>{{content["content"]}}</p></div>
+			<div v-if="content['type']=='IMAGE'" class="text-center"><img v-bind:src="content.content" class="img-fluid" alt="..."></div>
+			<div v-if="content['type']=='IMAGE_SUBTITLE'" class="text-center text-muted"><small>{{content["content"]}}</small></div>
+			<div v-if="content['type']=='EQUATION'" class="text-center" v-html="content.content"></div>
+							
+		</div>		
+		
+		<div v-if="exercises.length>0" class="container">
+	
+			<div class="card mt-5 mb-5">
+						
+				<div class="card-header">
+					<ul class="nav nav-tabs nav-fill">
+						<div v-for="ex in exercises">
+							<li class="nav-item">
+					    		<a v-on:click="changeCurrentExercise(parseInt(ex.number)-1)" v-bind:class="{'active':ex.active === true}" class="btn btn-link nav-link mr-5 ml-5">
+					    			<span>
+					    				<span v-if="exerciseMarkGreen(ex)" class="top-0 start-100 translate-middle p-2 bg-success border border-light"></span>
+					    				<span v-if="exerciseMarkRed(ex)" class="top-0 start-100 translate-middle p-2 bg-danger border border-light"></span>
+					    				Exercício {{ex.number}}					    				
+					    			</span>
+					    		</a>			    		
+					   		</li>
+						</div>
+					</ul>
+				</div>
+			
+				<div class="card-body">
+					<div v-for="content in currentExercise['content']">
+					
+						<div v-if="content['type']=='PARAGRAPH'" class="card-text"><p>{{content["content"]}}</p></div>
+						<div v-if="content['type']=='IMAGE'" class="card-text text-center"><img v-bind:src="content.content" class="img-fluid" alt="..."></div>
+						<div v-if="content['type']=='IMAGE_SUBTITLE'" class="card-subtitle text-center mb-2 text-muted"><small>{{content["content"]}}</small></div>
+						<div v-if="content['type']=='EQUATION'" class="card-text text-center" v-html="content.content"></div>
+					
+					</div>
+					
+					<!-- Button trigger modal -->
+					<div class="row justify-content-end mb-3 mt-5">
+						<button v-if="currentExercise.tip!=null" type="button" class="btn btn-warning btn-sm col-2" data-bs-toggle="modal" data-bs-target="#tip">
+			  				Dica
+						</button>
+					</div>
+					
+					<div v-if="currentExercise['type']=='MULTIPLE_CHOISE'" v-for="alternative in currentAlternatives" class="card mt-2">
+						<div class="card-body row align-items-center">
+							<button v-on:click="selectAlternative(alternative)" type="button" v-bind:class="alternative.style" class="btn col-1 text-center pt-3 pb-3">
+								{{alternative.letter}}
+							</button>
+							<div class="col-11">
+							<div v-for="content in alternative['content']">
+								<div v-if="content['type']=='PARAGRAPH'" class="card-text align-items-center pt-3"><p>{{content["content"]}}</p></div>
+								<div v-if="content['type']=='IMAGE'" class="card-text text-center"><img v-bind:src="content.content" class="img-fluid" alt="..."></div>
+								<div v-if="content['type']=='IMAGE_SUBTITLE'" class="card-subtitle text-center mb-2 text-muted"><small>{{content["content"]}}</small></div>
+								<div v-if="content['type']=='EQUATION'" class="card-text text-center" v-html="content.content"></div>
+							</div>
+							</div>
+							<div>
+							<div v-if="currentExercise.answered && alternative.comment!=null" class="card border-secondary mt-3 mb-3 mr-2 ml-2">
+								<div class="card-body text-secondary">
+									<div v-for="content in alternative.comment.content">
+										<div v-if="content['type']=='PARAGRAPH'" class="card-text">{{content["content"]}}</div>
+										<div v-if="content['type']=='IMAGE'" class="card-text text-center"><img v-bind:src="content.content" class="img-fluid" alt="..."></div>
+										<div v-if="content['type']=='IMAGE_SUBTITLE'" class="card-subtitle text-center mb-2 text-muted"><small>{{content["content"]}}</small></div>
+										<div v-if="content['type']=='EQUATION'" class="card-text text-center" v-html="content.content"></div>
+									</div>
+								</div>
+							</div>
+							</div>
+						</div>					
+					</div>
+					
+					<div v-if="currentExercise.answered && currentExercise.solution!=null" class="card border-2 border-success mt-5 mb-3" >
+<!-- 						<div class="card-header success">Solução</div> -->
+						<div class="card-body text-success">
+							<h5 class="card-title">Solução</h5>
+							<br>
+							<div v-for="content in currentExercise.solution.content">
+								<div v-if="content['type']=='PARAGRAPH'" class="card-text">{{content["content"]}}</div>
+								<div v-if="content['type']=='IMAGE'" class="card-text text-center"><img v-bind:src="content.content" class="img-fluid" alt="..."></div>
+								<div v-if="content['type']=='IMAGE_SUBTITLE'" class="card-subtitle text-center mb-2 text-muted"><small>{{content["content"]}}</small></div>
+								<div v-if="content['type']=='EQUATION'" class="card-text text-center" v-html="content.content"></div>
+							</div>
+<!-- 							<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
+						</div>
+					</div>
+					
+				</div>
+								
+			</div>
+			
+			<!-- Modal da Dica -->
+			<div v-if="currentExercise.tip!=null" class="modal fade" id="tip" tabindex="-1">
+			  	<div class="modal-dialog">
+			    	<div class="modal-content">
+			      		<div class="modal-header">
+<!-- 			        		<h5 class="modal-title" id="exampleModalLabel">Dica</h5> -->
+			        		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			      		</div>
+			      		<div class="modal-body align-self-center align-items-center">
+			      			<div v-for="content in currentExercise.tip.content">
+								<div v-if="content['type']=='PARAGRAPH'" class="card-text">{{content["content"]}}</div>
+								<div v-if="content['type']=='IMAGE'" class="card-text text-center"><img v-bind:src="content.content" class="img-fluid" alt="..."></div>
+								<div v-if="content['type']=='IMAGE_SUBTITLE'" class="card-subtitle text-center mb-2 text-muted"><small>{{content["content"]}}</small></div>
+								<div v-if="content['type']=='EQUATION'" class="card-text text-center" v-html="content.content"></div>
+							</div>
+			      		</div>
+			    	</div>
+			  	</div>
+			</div>
+			
+		</div>
+		
+		
+		<div class="row justify-content-end mb-3 mt-5">
+			<button v-if="specialButton==null" v-on:click="submitActivityDone" v-bind:class="{'disabled': this.finishButtonAvailable === false}" 
+			type="button" class="btn btn-success col-3">
+				CONCLUIR ATIVIDADE
+			</button>
+			
+			<a href="/content" v-if="specialButton=='noMoreActivitiesButton'" class="btn btn-success col-3">INICIAR NOVO OBJETIVO</a>
+			<a href="/content" v-if="specialButton=='newStudentButton'" class="btn btn-success col-3">DEFINIR OBJETIVO</a>			
+			<a href="/dashboard" v-if="specialButton=='contentNotFound'" class="btn btn-success col-3">VOLTAR PARA O DASHBOARD</a>			
+		</div>
+			
+	</div>
+	<script>
+		function onLoad() {
+			var app = new Vue(
+			{
+				el : '#core',
+				data : {primaryContents: [], exercises: [], currentExercise: null, currentAlternatives: [], responses: [],
+					finishButtonAvailable: false, specialButton: null},
+				mounted () {
+					axios
+				      .get('http://localhost:8083/api/learn/content')
+				      .then(response => {
+				    	  	this.primaryContents = response.data['content'];
+				    	  	if (response.data['exercises']!=null) {
+				    	  		this.exercises = response.data['exercises'];
+				    	  		this.prepareExercises();
+				     		} else {
+				     			if (response.data['specialFlag']!=null){
+				     				if (response.data['specialFlag'] == 'NO_MORE_ACTIVITIES') {this.specialButton = 'noMoreActivitiesButton';}
+				     				else if (response.data['specialFlag'] == 'NEW_STUDENT') {this.specialButton = 'newStudentButton';}
+				     				else if (response.data['specialFlag'] == 'CONTENT_NOT_FOUND') {this.specialButton = 'contentNotFound';}
+				     			} else {this.finishButtonAvailable = true;}
+				     		}				    	  	
+				    	});
+				},
+				methods: {
+					prepareExercises: function() {						
+						axios
+						.get('http://localhost:8083/api/learn/responses')
+						.then(response => {
+							this.responses = response.data;
+							if (this.responses.length==0) {
+								this.exercises.forEach(exercise => {
+									aux = {};
+									aux.answered = false;
+									this.responses.push(aux);
+								});
+								axios.put('http://localhost:8083/api/learn/responses', this.responses);
+								this.exercises.forEach(exercise => {exercise.answered = false; });
+							} else {
+								this.exercises.forEach(exercise => {
+									index = parseInt(exercise.number) -1;
+									exercise.answered = this.responses[index].answered; 
+								});
+							}
+							this.exercises.forEach(exercise=>{if (exercise['type']=='MULTIPLE_CHOISE'){this.updateAlternativeButtonsStyle(exercise);}});
+							this.updateFinishButtonAvailable();
+						});						
+			    	  	this.exercises.forEach(exercise => {exercise.active = false; });			    	  	
+			    	  	this.changeCurrentExercise(0);
+					},
+					updateAlternativeButtonsStyle: function(exercise){
+						index = parseInt(exercise.number) -1;
+						exercise['alternatives'].forEach(a => {
+							if (this.responses[index].answered) {
+								if (a.letter==this.responses[index].correctAnswer) {a.style='btn-success disabled';}
+								else if (a.letter==this.responses[index].alternativeLetter && !this.responses[index].correct) {a.style='btn-danger disabled';}
+								else {a.style='btn-primary disabled';}
+							} else {a.style='btn-primary'}
+						});	
+					},
+					updateFinishButtonAvailable: function() {
+						newFinishButtonState = true;
+						this.responses.forEach(e => {if (!e.answered) {newFinishButtonState=false;}});
+						this.finishButtonAvailable = newFinishButtonState;
+					},
+					changeCurrentExercise: function(index) {
+						this.exercises.forEach(ex => {ex.active=false;})
+						this.exercises[index].active = true;
+			    	  	this.currentExercise = this.exercises[index];
+			    	  	if (this.currentExercise['type']=='MULTIPLE_CHOISE') {this.currentAlternatives = this.currentExercise['alternatives'];}
+					},
+					selectAlternative: function(alternative) {
+						index = parseInt(this.currentExercise.number) -1;
+						
+						var aux = {};
+						aux.answered = true;
+						aux.exerciseNumber = (index +1);
+						aux.alternativeLetter = alternative.letter;
+						aux.correctAnswer = this.currentExercise.answer;
+						aux.correct = (alternative.letter==this.currentExercise.answer);
+						aux.weight = parseInt(this.currentExercise.weight);
+						if (aux.correct) aux.score = 1;
+						else aux.score = 0;
+						this.responses.splice(index,1,aux);
+						axios.put('http://localhost:8083/api/learn/responses', this.responses);
+						
+						this.updateAlternativeButtonsStyle(this.currentExercise);
+						this.currentExercise.answered = true;
+						this.exercises[index] = this.currentExercise;
+						this.currentAlternatives = [];
+						this.currentAlternatives = this.currentExercise['alternatives'];
+						
+						this.updateFinishButtonAvailable();
+					},
+					exerciseMarkGreen: function(exercise) {
+						index = parseInt(exercise.number) -1;
+						if (this.responses.length>index) {return (this.responses[index].answered == true && this.responses[index].correct == true);}
+						else {return false;}
+					},
+					exerciseMarkRed: function(exercise) {
+						index = parseInt(exercise.number) -1;
+						if (this.responses.length>index) {return (this.responses[index].answered == true && this.responses[index].correct == false);}
+						else {return false;}
+					},
+					submitActivityDone: function(exercise) {
+						axios
+					      .post('http://localhost:8083/api/learn/finishActivity', {
+// 					    	  objectiveId: objective.id
+					      })
+					      .then(response => {window.location.href = 'http://localhost:8083/' + response.data;})
+// 						window.location.href = 'http://localhost:8083/' + response.data;
+					}
+				}
+			});
+		}
+	</script>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</body>
+</html>

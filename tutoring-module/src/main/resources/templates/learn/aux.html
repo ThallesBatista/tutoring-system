@@ -1,0 +1,112 @@
+<div th:fragment="titleTemplate(content)">
+	<div class="mt-4">
+		<h4 th:text="${content}"/>
+	</div>
+</div>
+
+<div th:fragment="subtitleTemplate(content)">
+	<div class="mb-2">
+		<small class="text-muted" th:text="${content}"/>
+	</div>
+</div>
+
+<div th:fragment="imageTemplate(content)">
+	<div class="text-center">
+		<p>ainda preciso fazer a imagem</p>
+	</div>
+</div>
+
+<div th:fragment="imageSubtitleTemplate(content)">
+	<div class="text-center text-muted">
+		<small th:text="${content}"/>
+	</div>
+</div>
+
+<div th:fragment="paragraphTemplate(content)">
+	<div>
+		<p th:text="${content}"/>
+	</div>
+</div>
+
+<div th:fragment="exercisesTemplate(exercises)">	
+	<div class="container">
+	
+	
+		<div>{{this.test}}</div>
+		
+		
+		<div th:each="exercise : ${exercises}">
+			<div class="card mb-3">
+				<div th:each="content : ${exercise}">
+					<div class="card-body">
+						<div th:switch="${content.get('type').toString.substring(1,content.get('type').toString.length()-1)}">		
+							<div th:case="'IMAGE'"><div th:replace="~{learn/aux :: exerciseImageTemplate(content=${content.get('content').toString.substring(1,content.get('content').toString.length()-1)})}" /></div>
+							<div th:case="'IMAGE_SUBTITLE'"><div th:replace="~{learn/aux :: exerciseImageSubtitleTemplate(content=${content.get('content').toString.substring(1,content.get('content').toString.length()-1)})}" /></div>		
+							<div th:case="'PARAGRAPH'"><div th:replace="~{learn/aux :: exerciseParagraphTemplate(content=${content.get('content').toString.substring(1,content.get('content').toString.length()-1)})}" /></div>						
+							<div th:case="'FEEDBACK_HARD'"><div th:replace="~{learn/aux :: exerciseFeedbackTemplate(content=${content.get('content').toString.substring(1,content.get('content').toString.length()-1)})}" /></div>						
+							<div th:case="'FEEDBACK_MEDIUM'"><div th:replace="~{learn/aux :: exerciseFeedbackTemplate(content=${content.get('content').toString.substring(1,content.get('content').toString.length()-1)})}" /></div>						
+							<div th:case="'FEEDBACK_EASY'"><div th:replace="~{learn/aux ::exerciseFeedbackTemplate(content=${content.get('content').toString.substring(1,content.get('content').toString.length()-1)})}" /></div>						
+							<div th:case="'SOLUTION'"><div th:replace="~{learn/aux :: exerciseSolutionTemplate(content=${content.get('content').toString.substring(1,content.get('content').toString.length()-1)})}" /></div>						
+							<div th:case="'ALTERNATIVE'"><div th:replace="~{learn/aux :: exerciseAlternativeTemplate(contents=${content.get('content')})}" /></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
+</div>
+
+<div th:fragment="exerciseImageTemplate(content)">
+	<div class="card-text text-center">
+		<p>ainda preciso fazer a imagem</p>
+	</div>
+</div>
+
+<div th:fragment="exerciseImageSubtitleTemplate(content)">
+	<div class="card-subtitle text-center mb-2 text-muted">
+		<small th:text="${content}"/>
+	</div>
+</div>
+
+<div th:fragment="exerciseParagraphTemplate(content)">
+	<div class="card-text">
+		<p th:text="${content}"/>
+	</div>
+</div>
+
+<div th:fragment="exerciseFeedbackTemplate(content)">	
+	<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  		<symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+    		<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+  		</symbol>
+	</svg>
+
+	<div class="alert alert-primary d-flex align-items-center" role="alert">
+  		<svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+  		<div th:text="${content}"/>
+  		<p>Depois preciso tentar fechar...</p>
+	</div>
+</div>
+
+<div th:fragment="exerciseSolutionTemplate(content)">
+	<div class="card border-success mb-3" style="max-width: 18rem;">
+  		<div class="card-header">Solução</div>
+  		<div class="card-body text-primary">
+    		<p class="card-text" th:text="${content}"/>
+  		</div>
+	</div>
+</div>
+
+<div th:fragment="exerciseAlternativeTemplate(contents)">	
+	<div class="card">
+		<div th:each="content : ${contents}">
+			<div class="card-body">
+				<div th:switch="${content.get('type').toString.substring(1,content.get('type').toString.length()-1)}">		
+					<div th:case="'TEXT'">
+						<div class="card-text" th:text="${content.get('content').toString.substring(1,content.get('content').toString.length()-1)}" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

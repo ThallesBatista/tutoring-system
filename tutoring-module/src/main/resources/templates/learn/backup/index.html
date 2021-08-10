@@ -1,0 +1,41 @@
+<html>
+<head th:replace="~{base :: head}"/>
+<body onload="onLoad()">
+	<div th:replace="~{base :: logo}"/>
+	<div th:replace="~{base :: navbar('learn')}"/>
+	<div class="container" id="core">
+			
+		<div th:each="content : ${contents}">
+			<div th:switch="${content.get('type').toString.substring(1,content.get('type').toString.length()-1)}">		
+				<div th:case="'TITLE'"><div th:replace="~{learn/aux :: titleTemplate(content=${content.get('content').toString.substring(1,content.get('content').toString.length()-1)})}" /></div>
+				<div th:case="'SUBTITLE'"><div th:replace="~{learn/aux :: subtitleTemplate(content=${content.get('content').toString.substring(1,content.get('content').toString.length()-1)})}" /></div>
+				<div th:case="'IMAGE'"><div th:replace="~{learn/aux :: imageTemplate(content=${content.get('content').toString.substring(1,content.get('content').toString.length()-1)})}" /></div>
+				<div th:case="'IMAGE_SUBTITLE'"><div th:replace="~{learn/aux :: imageSubtitleTemplate(content=${content.get('content').toString.substring(1,content.get('content').toString.length()-1)})}" /></div>		
+				<div th:case="'PARAGRAPH'"><div th:replace="~{learn/aux :: paragraphTemplate(content=${content.get('content').toString.substring(1,content.get('content').toString.length()-1)})}" /></div>
+				<div th:case="'EXERCISES'"><div th:replace="~{learn/aux :: exercisesTemplate(exercises=${content.get('content')})}" /></div>	
+			</div>
+		</div>
+				
+	</div>
+	<script>
+		function onLoad() {
+			var app = new Vue(
+			{
+				el : '#core',
+				data : {test: null, exercises: []},
+				mounted () {
+					this.test = 'test';
+				},
+				methods: {
+					setExercises: function(exercises) {
+						this.exercises = exercises;
+						console.log(this.exercises);
+					}
+				}
+			});
+		}
+	</script>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</body>
+</html>
