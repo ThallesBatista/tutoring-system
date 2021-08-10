@@ -15,9 +15,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import br.com.sembous.smconsumerapi.gateway.StudentModuleGateway;
 import br.com.sembous.smconsumerapi.model.Interaction;
-import br.com.sembous.smconsumerapi.model.KnowledgePieceType;
+import br.com.sembous.smconsumerapi.model.KnowledgeType;
 import br.com.sembous.smconsumerapi.model.LearningPlanPiece;
-import br.com.sembous.smconsumerapi.model.LearningPlanPieceStatus;
+import br.com.sembous.smconsumerapi.model.KnowledgeStatus;
 import br.com.sembous.smconsumerapi.model.PreferenceType;
 import br.com.sembous.smconsumerapi.model.Student;
 
@@ -88,12 +88,12 @@ public class TutoringService {
 		return 100*(sum/weight);
 	}
 
-	public LearningPlanPieceStatus getActivityStatus(Integer foreignId, LearningPlanPiece currentActivity, Double score) {
-		if (!KnowledgePieceType.getEvaluationActivityTypes().contains(currentActivity.getType())) return LearningPlanPieceStatus.DONE;
-		if (score >= 70) return LearningPlanPieceStatus.DONE;
+	public KnowledgeStatus getActivityStatus(Integer foreignId, LearningPlanPiece currentActivity, Double score) {
+		if (!KnowledgeType.getEvaluationActivityTypes().contains(currentActivity.getType())) return KnowledgeStatus.DONE;
+		if (score >= 70) return KnowledgeStatus.DONE;
 		StudentModuleGateway smg = new StudentModuleGateway(restTemplate);
 		List<Interaction> interactions = smg.getInteractionWithLearningPlanPiece(foreignId, currentActivity);
-		if (interactions.size() >= 3) return LearningPlanPieceStatus.BLOCKED;
-		return LearningPlanPieceStatus.TO_DO;
+		if (interactions.size() >= 3) return KnowledgeStatus.BLOCKED;
+		return KnowledgeStatus.TO_DO;
 	}
 }

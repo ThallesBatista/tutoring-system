@@ -1,6 +1,6 @@
 package br.com.sembous.smconsumerapi.model;
 
-public enum LearningPlanPieceStatus {
+public enum KnowledgeStatus {
 
 	TO_DO,
 	BLOCKED,

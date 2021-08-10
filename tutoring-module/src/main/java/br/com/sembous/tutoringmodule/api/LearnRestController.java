@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.sembous.smconsumerapi.model.LearningPlanManager;
 import br.com.sembous.smconsumerapi.model.LearningPlanPiece;
-import br.com.sembous.smconsumerapi.model.LearningPlanPieceStatus;
+import br.com.sembous.smconsumerapi.model.KnowledgeStatus;
 import br.com.sembous.smconsumerapi.model.Student;
 import br.com.sembous.tutoringmodule.config.security.Role;
 import br.com.sembous.tutoringmodule.config.security.RoleValue;
@@ -90,7 +90,7 @@ public class LearnRestController {
 		
 		LearningPlanPiece currentActivity = (LearningPlanPiece) model.getAttribute("currentActivity");
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();		
-		LearningPlanPieceStatus status = tutoringService.getActivityStatus(user.getForeignId(), currentActivity, score);
+		KnowledgeStatus status = tutoringService.getActivityStatus(user.getForeignId(), currentActivity, score);
 		
 		learningPlanService.activityDone(user.getForeignId(), currentActivity, score, status);
 		

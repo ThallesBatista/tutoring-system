@@ -1,6 +1,6 @@
 package br.com.sembous.smconsumerapi.model;
 
-public enum LearningPlanPieceCategory {
+public enum KnowledgeCategory {
 
 	ESSENTIAL,
 	COMPLEMENT,

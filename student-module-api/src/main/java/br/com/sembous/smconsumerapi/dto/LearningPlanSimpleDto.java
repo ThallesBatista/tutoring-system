@@ -4,27 +4,19 @@ import java.time.Instant;
 
 import br.com.sembous.smconsumerapi.model.LearningPlan;
 
-public class LearningPlanDto {
-	
+public class LearningPlanSimpleDto {
+
 	private Integer id;
-//	private StudentDto student;
-	private LearningPlanPieceDto learningPlanGraph;
-	private Integer expertModuleId;
+	private Integer expertModuleId;	
 	private String name;
 	private Instant updatedAt;
 	
 	public LearningPlan convert() {
-		return new LearningPlan(id, learningPlanGraph.convert(), expertModuleId, name, updatedAt);
+		return new LearningPlan(id, expertModuleId, name, updatedAt);
 	}
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-//	public void setStudent(StudentDto student) {
-//		this.student = student;
-//	}
-	public void setLearningPlanGraph(LearningPlanPieceDto learningPlanGraph) {
-		this.learningPlanGraph = learningPlanGraph;
 	}
 	public void setExpertModuleId(Integer expertModuleId) {
 		this.expertModuleId = expertModuleId;

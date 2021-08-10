@@ -18,11 +18,6 @@ public class Student {
 		this.id = id;
 		this.personalInformations = new PersonalInformations(firstName, lastName, email);
 	}
-	public Student(Integer id, String firstName, String lastName, String email, Instant learningPlanUpdateAt, LearningPlanPiece pedagogicalLPP) {
-		this.id = id;
-		this.personalInformations = new PersonalInformations(firstName, lastName, email);
-		this.learningPlanManager = new LearningPlanManager(learningPlanUpdateAt, pedagogicalLPP, this);
-	}
 	public Student(Integer id, String firstName, String lastName, String email, 
 			PreferenceType likesExercises, PreferenceType needsMoreTime, PreferenceType likesVideos, 
 			PreferenceType likesTheChatbot, Instant preferencesUpdatedAt) {
