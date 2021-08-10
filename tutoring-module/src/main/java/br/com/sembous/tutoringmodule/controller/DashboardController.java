@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import br.com.sembous.emconsumerapi.model.Topic;
-import br.com.sembous.smconsumerapi.model.KnowledgePieceType;
+import br.com.sembous.smconsumerapi.model.KnowledgeType;
 import br.com.sembous.smconsumerapi.model.LearningPlanManager;
 import br.com.sembous.smconsumerapi.model.Student;
 import br.com.sembous.tutoringmodule.config.security.Role;
@@ -38,7 +38,7 @@ public class DashboardController {
 			Student student = optional.get();
 			model.addAttribute("student", student);
 			
-			Map<KnowledgePieceType, String> kpt2str = learningPlanService.getKpt2Labels();
+			Map<KnowledgeType, String> kpt2str = learningPlanService.getKpt2Labels();
 			model.addAttribute("kpt2str", kpt2str);
 			
 			String topicName = null;

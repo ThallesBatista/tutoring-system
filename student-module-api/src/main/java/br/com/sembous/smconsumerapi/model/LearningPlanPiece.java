@@ -6,78 +6,87 @@ import java.util.stream.Collectors;
 
 public class LearningPlanPiece {
 	
-	private Student student;
-	private KnowledgePieceType type;
+	private Long id;
+	private KnowledgeType type;
 	private Integer expertModuleId;
-	
 	private LearningPlanPiece fatherLPP = null;
 	private List<LearningPlanPiece> childLPP = new ArrayList<>();
-	private LearningPlanPieceCategory category;
-	private LearningPlanPieceStatus status = LearningPlanPieceStatus.TO_DO;
+	private KnowledgeCategory category;
+	private KnowledgeStatus status = KnowledgeStatus.TO_DO;
 	private Double score = Double.valueOf(0);
 	private String name;
+
+// PELO MENOS OS IDS ACHO QUE TENHO QUE COLOCAR NOS CONSTRUTORES
 	
-	public LearningPlanPiece(KnowledgePieceType type, Integer expertModuleId, Double score, LearningPlanPieceStatus status) {
-		
+//	public LearningPlanPiece(KnowledgeType type, Integer expertModuleId, Double score, KnowledgeStatus status) {
+//		
+//		this.type = type;
+//		this.expertModuleId = expertModuleId;
+//		this.score = score;
+//		this.status = status;
+//	}
+//	public LearningPlanPiece(KnowledgeType type, Integer expertModuleId, List<LearningPlanPiece> childLPP, 
+//			KnowledgeCategory learningPlanPieceCategory, String name) {
+//		
+//		this.type = type;
+//		this.expertModuleId = expertModuleId;
+//		if (childLPP!=null) childLPP.stream().forEach(this::addChild);
+//		this.category = learningPlanPieceCategory;
+//		this.name = name;
+//	}
+//	public LearningPlanPiece(KnowledgeType type, Integer expertModuleId,
+//			List<LearningPlanPiece> childLPP, KnowledgeCategory learningPlanPieceCategory,
+//			KnowledgeStatus status, Double score, String name) {
+//		
+//		this.type = type;
+//		this.expertModuleId = expertModuleId;
+//		if (childLPP!=null) childLPP.stream().forEach(this::addChild);
+//		this.category = learningPlanPieceCategory;
+//		this.score = score;
+//		this.status = status;
+//		this.name = name;
+//	}	
+	public LearningPlanPiece(Long id, KnowledgeType type, Integer expertModuleId, List<LearningPlanPiece> childLPPConverted, 
+			KnowledgeCategory category, KnowledgeStatus status,	Double score, String name) {
+		this.id = id;
 		this.type = type;
 		this.expertModuleId = expertModuleId;
-		this.score = score;
+		childLPPConverted.forEach(this::addChild);
+		this.category = category;
 		this.status = status;
-	}
-	public LearningPlanPiece(KnowledgePieceType type, Integer expertModuleId, List<LearningPlanPiece> childLPP, 
-			LearningPlanPieceCategory learningPlanPieceCategory, String name) {
-		
-		this.type = type;
-		this.expertModuleId = expertModuleId;
-		if (childLPP!=null) childLPP.stream().forEach(this::addChild);
-		this.category = learningPlanPieceCategory;
-		this.name = name;
-	}
-	public LearningPlanPiece(KnowledgePieceType type, Integer expertModuleId,
-			List<LearningPlanPiece> childLPP, LearningPlanPieceCategory learningPlanPieceCategory,
-			LearningPlanPieceStatus status, Double score, String name) {
-		
-		this.type = type;
-		this.expertModuleId = expertModuleId;
-		if (childLPP!=null) childLPP.stream().forEach(this::addChild);
-		this.category = learningPlanPieceCategory;
 		this.score = score;
-		this.status = status;
 		this.name = name;
 	}
 	private void addChild(LearningPlanPiece child) {
 		child.setFatherLPP(this);
 		this.childLPP.add(child);
 	}
-	
-	
+
+
 	void setFatherLPP(LearningPlanPiece fatherLPP) {
 		this.fatherLPP = fatherLPP;
 	}
-	void setStudent(Student student) {
-		this.student = student;
-	}
+// TALVEZ PRECISE AINDA, NO FLUXO DE UPDATE
 //	void updateStatus(LearningPlanPieceStatus newStatus, Double newScore) {
 //		this.status = newStatus;
 //		this.score = newScore;
 //	}
+	
+	
 	public Double getProgress() {
 		List<LearningPlanPiece> flatLP = LearningPlanGraphUtil.learningPlanOrderListFlatter(this).stream()
-				.filter(p -> {return KnowledgePieceType.getActivityTypes().contains(p.getType());})
+				.filter(p -> {return KnowledgeType.getActivityTypes().contains(p.getType());})
 				.collect(Collectors.toList());
 		if (flatLP.isEmpty()) return Double.valueOf(1);
-//		flatLP.remove(this);
 		long totalLPP = flatLP.stream().count();
-		long doneLPP = flatLP.stream().filter(p -> p.getStatus().equals(LearningPlanPieceStatus.DONE)).count();
+		long doneLPP = flatLP.stream().filter(p -> p.getStatus().equals(KnowledgeStatus.DONE)).count();
 		Double progress = Double.valueOf(Double.valueOf(doneLPP)/Double.valueOf(totalLPP));
 		return progress;
+	}	
+	public Long getId() {
+		return this.id;
 	}
-	
-	
-	public Student getStudent() {
-		return student;
-	}
-	public KnowledgePieceType getType() {
+	public KnowledgeType getType() {
 		return type;
 	}
 	public Integer getExpertModuleId() {
@@ -89,10 +98,10 @@ public class LearningPlanPiece {
 	public List<LearningPlanPiece> getChildLPP() {
 		return childLPP;
 	}
-	public LearningPlanPieceCategory getCategory() {
+	public KnowledgeCategory getCategory() {
 		return category;
 	}
-	public LearningPlanPieceStatus getStatus() {
+	public KnowledgeStatus getStatus() {
 		return status;
 	}
 	public Double getScore() {
@@ -107,9 +116,7 @@ public class LearningPlanPiece {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((this.getStudent() == null) ? 0 : this.getStudent().hashCode());
-		result = prime * result + ((this.getType() == null) ? 0 : this.getType().hashCode());
-		result = prime * result + ((this.getExpertModuleId() == null) ? 0 : this.getExpertModuleId().hashCode());
+		result = prime * result + ((this.getId() == null) ? 0 : this.getId().hashCode());
 		return result;
 	}
 	@Override
@@ -122,25 +129,12 @@ public class LearningPlanPiece {
 			return false;
 		LearningPlanPiece other = (LearningPlanPiece) obj;
 		
-		if (this.getStudent() == null) {
-			if (other.getStudent() != null)
+		if (this.getId() == null) {
+			if (other.getId() != null)
 				return false;
-		} else if (!this.getStudent().equals(other.getStudent()))
-			return false;
-		
-		if (this.getType() == null) {
-			if (other.getType() != null)
-				return false;
-		} else if (!this.getType().equals(other.getType()))
-			return false;
-		
-		if (this.getExpertModuleId() == null) {
-			if (other.getExpertModuleId() != null)
-				return false;
-		} else if (!this.getExpertModuleId().equals(other.getExpertModuleId()))
+		} else if (!this.getId().equals(other.getId()))
 			return false;
 		
 		return true;
-	}	
-	
+	}
 }

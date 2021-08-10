@@ -2,6 +2,7 @@ package br.com.sembous.smconsumerapi.model;
 
 import java.time.Instant;
 import java.util.Optional;
+import java.util.Set;
 
 public class Student {
 
@@ -18,17 +19,25 @@ public class Student {
 		this.id = id;
 		this.personalInformations = new PersonalInformations(firstName, lastName, email);
 	}
-	public Student(Integer id, String firstName, String lastName, String email, Instant learningPlanUpdateAt, LearningPlanPiece pedagogicalLPP) {
-		this.id = id;
-		this.personalInformations = new PersonalInformations(firstName, lastName, email);
-		this.learningPlanManager = new LearningPlanManager(learningPlanUpdateAt, pedagogicalLPP, this);
-	}
 	public Student(Integer id, String firstName, String lastName, String email, 
 			PreferenceType likesExercises, PreferenceType needsMoreTime, PreferenceType likesVideos, 
 			PreferenceType likesTheChatbot, Instant preferencesUpdatedAt) {
 		this.id = id;
 		this.personalInformations = new PersonalInformations(firstName, lastName, email);
 		this.preferences = new Preferences(likesExercises, needsMoreTime, likesVideos, likesTheChatbot, preferencesUpdatedAt);
+	}
+	public Student(Integer id, String firstName, String lastName, String email, Set<LearningPlan> learningPlans) {
+		this.id = id;
+		this.personalInformations = new PersonalInformations(firstName, lastName, email);
+		this.learningPlanManager = new LearningPlanManager(learningPlans);
+	}
+	public Student(Integer id, String firstName, String lastName, String email, 
+			PreferenceType likesExercises, PreferenceType needsMoreTime, PreferenceType likesVideos, 
+			PreferenceType likesTheChatbot, Instant preferencesUpdatedAt, Set<LearningPlan> learningPlans) {
+		this.id = id;
+		this.personalInformations = new PersonalInformations(firstName, lastName, email);
+		this.preferences = new Preferences(likesExercises, needsMoreTime, likesVideos, likesTheChatbot, preferencesUpdatedAt);
+		this.learningPlanManager = new LearningPlanManager(learningPlans);
 	}
 	
 	

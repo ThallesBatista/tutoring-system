@@ -21,9 +21,9 @@ import br.com.sembous.emconsumerapi.model.Activity;
 import br.com.sembous.emconsumerapi.model.PedagogicalObjective;
 import br.com.sembous.emconsumerapi.model.Topic;
 import br.com.sembous.smconsumerapi.gateway.StudentModuleGateway;
-import br.com.sembous.smconsumerapi.model.KnowledgePieceType;
+import br.com.sembous.smconsumerapi.model.KnowledgeType;
 import br.com.sembous.smconsumerapi.model.LearningPlanPiece;
-import br.com.sembous.smconsumerapi.model.LearningPlanPieceStatus;
+import br.com.sembous.smconsumerapi.model.KnowledgeStatus;
 import br.com.sembous.smconsumerapi.model.Student;
 import br.com.sembous.tutoringmodule.QuickTest;
 import br.com.sembous.tutoringmodule.service.util.EnumTranslater;
@@ -57,7 +57,7 @@ public class LearningPlanService {
 		return smg.get(studentId);
 	}
 
-	public Map<KnowledgePieceType, String> getKpt2Labels() {
+	public Map<KnowledgeType, String> getKpt2Labels() {
 		return EnumTranslater.getKpt2Labels();
 	}
 
@@ -69,7 +69,7 @@ public class LearningPlanService {
 	}
 	
 	public Optional<JsonNode> getContentOfActivity(LearningPlanPiece activityLPP) {
-		if (!KnowledgePieceType.getActivityTypes().contains(activityLPP.getType())) {
+		if (!KnowledgeType.getActivityTypes().contains(activityLPP.getType())) {
 			new IllegalArgumentException("Object passed as argument is not an activity").printStackTrace();
 			return Optional.empty();
 		}
@@ -121,7 +121,7 @@ public class LearningPlanService {
 		return json;
 	}
 
-	public void activityDone(Integer studentId, LearningPlanPiece currentActivity, Double score, LearningPlanPieceStatus status) {
+	public void activityDone(Integer studentId, LearningPlanPiece currentActivity, Double score, KnowledgeStatus status) {
 		LearningPlanPiece learningPlanPiece = new LearningPlanPiece(currentActivity.getType(), currentActivity.getExpertModuleId(), score, status);
 		StudentModuleGateway smg = new StudentModuleGateway(restTemplate);		
 		smg.activityDone(studentId, learningPlanPiece);

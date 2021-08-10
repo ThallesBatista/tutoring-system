@@ -15,9 +15,9 @@ import br.com.sembous.emconsumerapi.model.Activity;
 import br.com.sembous.emconsumerapi.model.Concept;
 import br.com.sembous.emconsumerapi.model.Notion;
 import br.com.sembous.emconsumerapi.model.PedagogicalObjective;
-import br.com.sembous.smconsumerapi.model.KnowledgePieceType;
+import br.com.sembous.smconsumerapi.model.KnowledgeType;
 import br.com.sembous.smconsumerapi.model.LearningPlanPiece;
-import br.com.sembous.smconsumerapi.model.LearningPlanPieceCategory;
+import br.com.sembous.smconsumerapi.model.KnowledgeCategory;
 
 public class LearningPlanGraphCreator {
 
@@ -43,11 +43,11 @@ public class LearningPlanGraphCreator {
 	
 	private LearningPlanPiece lPPGraphBuilder(PedagogicalObjective po) {
 		List<LearningPlanPiece> notionsLPP = po.getNotions().stream().map(n -> this.lPPGraphBuilder(n)).collect(Collectors.toList());
-		return new LearningPlanPiece(KnowledgePieceType.PEDAGOGICAL_OBJECTIVE, po.getId(), notionsLPP, LearningPlanPieceCategory.ESSENTIAL, po.getName());
+		return new LearningPlanPiece(KnowledgeType.PEDAGOGICAL_OBJECTIVE, po.getId(), notionsLPP, KnowledgeCategory.ESSENTIAL, po.getName());
 	}
 	private LearningPlanPiece lPPGraphBuilder(Notion notion) {
 		List<LearningPlanPiece> conceptsLPP = notion.getConcepts().stream().map(c -> this.lPPGraphBuilder(c)).collect(Collectors.toList());
-		return new LearningPlanPiece(KnowledgePieceType.NOTION, notion.getId(), conceptsLPP, LearningPlanPieceCategory.ESSENTIAL, notion.getName());
+		return new LearningPlanPiece(KnowledgeType.NOTION, notion.getId(), conceptsLPP, KnowledgeCategory.ESSENTIAL, notion.getName());
 	}
 	private LearningPlanPiece lPPGraphBuilder(Concept c) {
 		List<LearningPlanPiece> activitiesLPP = c.getActivities().stream().map(a -> this.lPPGraphBuilder(a)).collect(Collectors.toList());
@@ -57,11 +57,11 @@ public class LearningPlanGraphCreator {
 		activitiesLPP.forEach(conceptChildrenLPP::add);
 		childConceptsLPP.forEach(conceptChildrenLPP::add);
 		
-		return new LearningPlanPiece(KnowledgePieceType.CONCEPT, c.getId(), conceptChildrenLPP, LearningPlanPieceCategory.ESSENTIAL, c.getName());
+		return new LearningPlanPiece(KnowledgeType.CONCEPT, c.getId(), conceptChildrenLPP, KnowledgeCategory.ESSENTIAL, c.getName());
 	}
 	private LearningPlanPiece lPPGraphBuilder(Activity a) {		
-		KnowledgePieceType type = EnumTranslater.activityType2KnowledgePieceType(a.getType());
-		LearningPlanPieceCategory category = EnumTranslater.activitySubtype2LearningPlanPieceCategory(a.getSubtype());
+		KnowledgeType type = EnumTranslater.activityType2KnowledgePieceType(a.getType());
+		KnowledgeCategory category = EnumTranslater.activitySubtype2LearningPlanPieceCategory(a.getSubtype());
 		return new LearningPlanPiece(type, a.getId(), null, category, a.getName());
 	}
 }

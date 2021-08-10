@@ -1,5 +1,6 @@
 package br.com.sembous.studentmodule.model;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -32,6 +33,9 @@ public final class LearningPlanManager {
 	}
 	public void removeLearningPlan(Integer id) {
 		this.learningPlans.removeIf(l -> l.getId().equals(id));		
+	}
+	public Set<LearningPlan> getLearningPlans() {
+		return Collections.unmodifiableSet(this.learningPlans);
 	}
 //	public void alterLearningActiveLearningPlan(Integer id) {
 //		Optional<LearningPlan> optional = this.learningPlans.stream().filter(lp -> lp.getId().equals(id)).findAny();
