@@ -28,6 +28,11 @@
   			<artifactId>student-module-api</artifactId>
   			<version>0.1.7-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>br.com.sembous</groupId>
+  			<artifactId>teacher-module-api</artifactId>
+  			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

@@ -14,6 +14,9 @@ import org.springframework.web.client.RestTemplate;
 import br.com.sembous.smconsumerapi.gateway.StudentGateway;
 import br.com.sembous.smconsumerapi.gateway.StudentModuleGateway;
 import br.com.sembous.smconsumerapi.model.Student;
+import br.com.sembous.teachermoduleapi.gateway.TeacherGateway;
+import br.com.sembous.teachermoduleapi.gateway.TeacherModuleGateway;
+import br.com.sembous.teachermoduleapi.model.Teacher;
 import br.com.sembous.tutoringmodule.config.security.Role;
 import br.com.sembous.tutoringmodule.config.security.RoleRepository;
 import br.com.sembous.tutoringmodule.config.security.RoleValue;
@@ -42,13 +45,24 @@ public class UserInputController {
 	
 	@PostMapping(path="/signup")
 	public String postSignup(@Valid SignupForm form) {
-		Student student = form.convertToStudent();
-		StudentGateway smg = StudentModuleGateway.getStudentGateway(new RestTemplate());
-		Optional<Student> optional = smg.create(student);
-		if (optional.isEmpty()) return "redirect:/signup";
+		RoleValue role = form.getRole();
+		Integer foreignId;
+		if (role.equals(RoleValue.ROLE_TEACHER)) {
+			Teacher teacher = form.convertToTeacher();
+			TeacherGateway teacherGateway = TeacherModuleGateway.getTeacherGateway(new RestTemplate());
+			Optional<Teacher> optional = teacherGateway.create(teacher);
+			if (optional.isEmpty()) return "redirect:/signup";
+			foreignId = optional.get().getId();
+		} else {
+			Student student = form.convertToStudent();
+			StudentGateway smg = StudentModuleGateway.getStudentGateway(new RestTemplate());
+			Optional<Student> optional = smg.create(student);
+			if (optional.isEmpty()) return "redirect:/signup";
+			foreignId = optional.get().getId();
+		}
 		
-		Optional<Role> optionalRole = roleRepository.findByName(RoleValue.ROLE_STUDENT);
-		User user = form.convert(optional.get().getId(), Set.of(optionalRole.get()));
+		Optional<Role> optionalRole = roleRepository.findByName(role);
+		User user = form.convert(foreignId, Set.of(optionalRole.get()));
 		userRepository.save(user);
 		
 		return "redirect:/login";

@@ -1,0 +1,38 @@
+<html>
+<head th:replace="~{base :: head}"></head>
+<body onload="onLoad()">
+	<div th:replace="~{base :: logo}"></div>
+	<div th:replace="~{base :: navbar('dashboard')}"></div>
+	<div class="container" id="core">
+		
+		<div class="card mt-2">
+			<div class="card-body row align-items-center">
+				<div class = "col-3 d-flex justify-content-center">
+					<div class="text-center"><img src="https://image.flaticon.com/icons/png/512/149/149071.png" class="img-fluid" alt="..."></div>
+				</div>
+				<div class = "col offset-md-1">
+					<h5 class="card-title" th:text="professor"/>
+					<br>
+					<br>
+				</div>
+			</div>	
+		</div>
+		
+	</div>
+	<script>
+		function onLoad() {
+			var app = new Vue(
+			{
+				el : '#core',
+				data : {learningPlanList: [], selectedLearningPlan: null, learningPlanId2TopicName: {}, knowledgeType2NewLabel: {}},
+				mounted () {
+				},
+				methods: {
+				}
+			});
+		}
+	</script>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</body>
+</html>

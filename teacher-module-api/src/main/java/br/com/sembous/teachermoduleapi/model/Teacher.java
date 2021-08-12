@@ -1,37 +1,25 @@
-package br.com.sembous.teachermodule.model;
+package br.com.sembous.teachermoduleapi.model;
 
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "teachers")
 public class Teacher {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	@Embedded
 	private PersonalInformations personalInformations;
-	@Embedded
-	private ClazzManager clazzManager;
+//	private ClazzManager clazzManager;
 	
-	public Teacher() {}
 	public Teacher(String firstName, String lastName, String email) {
 		this.personalInformations = new PersonalInformations(firstName, lastName, email);
 	}
-
-
+	public Teacher(Integer id, String firstName, String lastName, String email) {
+		this.id = id;
+		this.personalInformations = new PersonalInformations(firstName, lastName, email);
+	}
+	
 	public Integer getId() {
 		return id;
 	}
 	public PersonalInformations getPersonalInformations() {
 		return personalInformations;
 	}
-	
 	
 	@Override
 	public int hashCode() {
