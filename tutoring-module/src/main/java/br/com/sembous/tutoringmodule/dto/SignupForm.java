@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import br.com.sembous.smconsumerapi.model.Student;
+import br.com.sembous.teachermoduleapi.model.Teacher;
 import br.com.sembous.tutoringmodule.config.security.Role;
 import br.com.sembous.tutoringmodule.config.security.RoleValue;
 import br.com.sembous.tutoringmodule.config.security.User;
@@ -35,6 +36,9 @@ public class SignupForm {
 	}
 	public Student convertToStudent() {
 		return new Student(firstName, lastName, email);
+	}
+	public Teacher convertToTeacher() {
+		return new Teacher(this.firstName, this.lastName, this.email);
 	}
 
 
