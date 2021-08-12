@@ -18,7 +18,7 @@ public class LearningPlanDto {
 		this.expertModuleId = learningPlan.getExpertModuleId();
 		this.name = learningPlan.getName();
 		this.updatedAt = learningPlan.getUpdatedAt();
-		this.student = new StudentDto(learningPlan.getStudent(), Boolean.FALSE, Boolean.FALSE);
+		this.student = new StudentDto(learningPlan.getStudent(), Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
 		this.learningPlanGraph = new LearningPlanPieceDto(learningPlan.getLearningPlanGraph());
 	}
 

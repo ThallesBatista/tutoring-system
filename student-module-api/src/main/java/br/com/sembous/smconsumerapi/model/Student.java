@@ -2,13 +2,13 @@ package br.com.sembous.smconsumerapi.model;
 
 import java.time.Instant;
 import java.util.Optional;
-import java.util.Set;
 
 public class Student {
 
 	private Integer id;
 	private PersonalInformations personalInformations;
 	private LearningPlanManager learningPlanManager;
+	private KnowledgeDoneManager knowledgeDoneManager;
 	private Preferences preferences;
 	
 	
@@ -26,20 +26,15 @@ public class Student {
 		this.personalInformations = new PersonalInformations(firstName, lastName, email);
 		this.preferences = new Preferences(likesExercises, needsMoreTime, likesVideos, likesTheChatbot, preferencesUpdatedAt);
 	}
-	public Student(Integer id, String firstName, String lastName, String email, Set<LearningPlan> learningPlans) {
-		this.id = id;
-		this.personalInformations = new PersonalInformations(firstName, lastName, email);
-		this.learningPlanManager = new LearningPlanManager(learningPlans);
-	}
-	public Student(Integer id, String firstName, String lastName, String email, 
-			PreferenceType likesExercises, PreferenceType needsMoreTime, PreferenceType likesVideos, 
-			PreferenceType likesTheChatbot, Instant preferencesUpdatedAt, Set<LearningPlan> learningPlans) {
-		this.id = id;
-		this.personalInformations = new PersonalInformations(firstName, lastName, email);
-		this.preferences = new Preferences(likesExercises, needsMoreTime, likesVideos, likesTheChatbot, preferencesUpdatedAt);
-		this.learningPlanManager = new LearningPlanManager(learningPlans);
-	}
 	
+	public void setLearningPlanManager(LearningPlanManager learningPlanManager) {
+		if (this.learningPlanManager!=null) return;
+		this.learningPlanManager = learningPlanManager;
+	}
+	public void setKnowledgeDoneManager(KnowledgeDoneManager knowledgeDoneManager) {
+		if (this.knowledgeDoneManager!=null) return;
+		this.knowledgeDoneManager = knowledgeDoneManager;
+	}
 	
 	public Integer getId() {
 		return id;
@@ -53,6 +48,10 @@ public class Student {
 	public Optional<Preferences> getPreferences() {
 		return Optional.ofNullable(preferences);
 	}
+	public Optional<KnowledgeDoneManager> getKnowledgeDoneManager() {
+		return Optional.ofNullable(knowledgeDoneManager);
+	}
+	
 	
 
 	@Override

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.RestTemplate;
 
+import br.com.sembous.smconsumerapi.gateway.StudentGateway;
 import br.com.sembous.smconsumerapi.gateway.StudentModuleGateway;
 import br.com.sembous.smconsumerapi.model.Student;
 import br.com.sembous.tutoringmodule.config.security.Role;
@@ -42,8 +43,8 @@ public class UserInputController {
 	@PostMapping(path="/signup")
 	public String postSignup(@Valid SignupForm form) {
 		Student student = form.convertToStudent();
-		StudentModuleGateway smg = new StudentModuleGateway(new RestTemplate());
-		Optional<Student> optional = smg.postStudent(student);
+		StudentGateway smg = StudentModuleGateway.getStudentGateway(new RestTemplate());
+		Optional<Student> optional = smg.create(student);
 		if (optional.isEmpty()) return "redirect:/signup";
 		
 		Optional<Role> optionalRole = roleRepository.findByName(RoleValue.ROLE_STUDENT);

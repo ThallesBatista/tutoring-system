@@ -1,8 +1,6 @@
 package br.com.sembous.studentmodule.dto;
 
 import java.time.Instant;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import br.com.sembous.studentmodule.model.Student;
 
@@ -17,9 +15,10 @@ public class StudentDto {
 	private String likesTheChatbot;
 	private String likesVideos;
 	private String needsMoreTime;
-	private Set<LearningPlanSimpleDto> learningPlans;
+	private LearningPlanManagerDto learningPlanManager;
+	private KnowledgeDoneManagerDto knowledgeDoneManager;
 	
-	public StudentDto(Student student, Boolean withPreferences, Boolean withLearningPlan) {
+	public StudentDto(Student student, Boolean withPreferences, Boolean withLearningPlan, Boolean withKnowledgeDone) {
 		this.id = student.getId();
 		this.firstName = student.getPersonalInformations().getFirstName();
 		this.lastName = student.getPersonalInformations().getLastName();
@@ -31,11 +30,8 @@ public class StudentDto {
 			this.likesVideos = student.getPreferences().likesVideos().toString();
 			this.needsMoreTime = student.getPreferences().needsMoreTime().toString();
 		}
-		if (withLearningPlan) {
-			this.learningPlans = student.getLearningPlanManager().getLearningPlans().stream()
-					.map(LearningPlanSimpleDto::new)
-					.collect(Collectors.toSet());
-		}
+		if (withLearningPlan) this.learningPlanManager = new LearningPlanManagerDto(student.getLearningPlanManager());
+		if (withKnowledgeDone) this.knowledgeDoneManager = new KnowledgeDoneManagerDto(student.getKnowledgeManager());
 	}
 
 	
@@ -66,7 +62,10 @@ public class StudentDto {
 	public String getNeedsMoreTime() {
 		return needsMoreTime;
 	}
-	public Set<LearningPlanSimpleDto> getLearningPlans() {
-		return learningPlans;
+	public LearningPlanManagerDto getLearningPlanManager() {
+		return learningPlanManager;
+	}
+	public KnowledgeDoneManagerDto getKnowledgeDoneManager() {
+		return knowledgeDoneManager;
 	}
 }

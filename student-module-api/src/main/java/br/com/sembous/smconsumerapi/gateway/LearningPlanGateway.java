@@ -44,10 +44,10 @@ public class LearningPlanGateway {
 	}
 	
 	
-	public Optional<LearningPlan> create(LearningPlanPiece piece) {
+	public Optional<LearningPlan> create(Integer studentId, LearningPlanPiece piece) {
 		LearningPlanPieceForm form = new LearningPlanPieceForm(piece);
 		LearningPlan lp;
-		String url = this.baseUrl;
+		String url = this.baseUrl + "?studentId=" + studentId.toString();
 		
 		try {
 			ResponseEntity<LearningPlanSimpleDto> re = this.restTemplate.postForEntity(url, form, LearningPlanSimpleDto.class);

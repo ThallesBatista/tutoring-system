@@ -20,12 +20,14 @@ import br.com.sembous.emconsumerapi.gateway.UntilValue;
 import br.com.sembous.emconsumerapi.model.Activity;
 import br.com.sembous.emconsumerapi.model.PedagogicalObjective;
 import br.com.sembous.emconsumerapi.model.Topic;
+import br.com.sembous.smconsumerapi.gateway.LearningPlanGateway;
+import br.com.sembous.smconsumerapi.gateway.StudentGateway;
 import br.com.sembous.smconsumerapi.gateway.StudentModuleGateway;
-import br.com.sembous.smconsumerapi.model.KnowledgeType;
-import br.com.sembous.smconsumerapi.model.LearningPlanPiece;
 import br.com.sembous.smconsumerapi.model.KnowledgeStatus;
+import br.com.sembous.smconsumerapi.model.KnowledgeType;
+import br.com.sembous.smconsumerapi.model.LearningPlan;
+import br.com.sembous.smconsumerapi.model.LearningPlanPiece;
 import br.com.sembous.smconsumerapi.model.Student;
-import br.com.sembous.tutoringmodule.QuickTest;
 import br.com.sembous.tutoringmodule.service.util.EnumTranslater;
 import br.com.sembous.tutoringmodule.service.util.LearningPlanGraphCreator;
 import br.com.sembous.tutoringmodule.service.util.StaticContentJson;
@@ -35,26 +37,20 @@ public class LearningPlanService {
 
 	private RestTemplate restTemplate = new RestTemplate();
 	
-	public void selectNewLearningPlan(Integer studentId, Integer objectiveId) {
-		StudentModuleGateway smg = new StudentModuleGateway(restTemplate);	
-		Optional<Student> optionalStudent = smg.getStudent(studentId);
-		if (optionalStudent.isEmpty()) return;
-		Student student = optionalStudent.get();
-		
+	public void selectNewLearningPlan(Integer studentId, Integer objectiveId) {		
 		LearningPlanGraphCreator lpgCreator = new LearningPlanGraphCreator(restTemplate);
-		
-		LearningPlanPiece lPGraph;
 		try {
-			lPGraph = lpgCreator.createFromExpertModule(objectiveId);
+			LearningPlanPiece lPGraph = lpgCreator.createFromExpertModule(objectiveId);
+			LearningPlanGateway lpg = StudentModuleGateway.getLearningPlanGateway(restTemplate);
+			lpg.create(studentId, lPGraph);
 		} catch (IOException e) {
-			return;
+			e.printStackTrace();
 		}
-		smg.update(student, lPGraph);
 	}
 
-	public Optional<Student> getLearningPlan(Integer studentId) {
-		StudentModuleGateway smg = new StudentModuleGateway(restTemplate);
-		return smg.get(studentId);
+	public Optional<Student> getStudentWithLearningPlansAndKnowledgeDone(Integer studentId) {
+		StudentGateway smg = StudentModuleGateway.getStudentGateway(restTemplate);
+		return smg.get(studentId, Boolean.FALSE, Boolean.TRUE, Boolean.TRUE);
 	}
 
 	public Map<KnowledgeType, String> getKpt2Labels() {
@@ -101,7 +97,7 @@ public class LearningPlanService {
 		
 		JsonNode json;
 		try {
-	        InputStream fis = QuickTest.class.getResourceAsStream(fileName);
+	        InputStream fis = LearningPlanService.class.getResourceAsStream(fileName);
 			Reader isr = new InputStreamReader(fis);
 			BufferedReader br = new BufferedReader(isr);
 		
@@ -121,9 +117,21 @@ public class LearningPlanService {
 		return json;
 	}
 
-	public void activityDone(Integer studentId, LearningPlanPiece currentActivity, Double score, KnowledgeStatus status) {
+	public Optional<LearningPlan> getLearningPlan(Integer id) {
+		LearningPlanGateway learningPlanGateway = StudentModuleGateway.getLearningPlanGateway(restTemplate);
+		return learningPlanGateway.get(id);
+	}
+	
+	public void removeLearningPlan(Integer id) {
+		LearningPlanGateway learningPlanGateway = StudentModuleGateway.getLearningPlanGateway(restTemplate);
+		learningPlanGateway.delete(id);
+	}
+	
+	public LearningPlan activityDone(Integer learningPlanId, LearningPlanPiece currentActivity, Double score, KnowledgeStatus status) {
+		LearningPlanGateway learningPlanGateway = StudentModuleGateway.getLearningPlanGateway(restTemplate);
 		LearningPlanPiece learningPlanPiece = new LearningPlanPiece(currentActivity.getType(), currentActivity.getExpertModuleId(), score, status);
-		StudentModuleGateway smg = new StudentModuleGateway(restTemplate);		
-		smg.activityDone(studentId, learningPlanPiece);
+		learningPlanGateway.updateActivity(learningPlanPiece);
+		
+		return this.getLearningPlan(learningPlanId).get();
 	}
 }

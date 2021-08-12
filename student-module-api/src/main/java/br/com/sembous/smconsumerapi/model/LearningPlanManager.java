@@ -20,7 +20,7 @@ public class LearningPlanManager {
 	public Set<LearningPlan> getLearningPlans() {
 		return Collections.unmodifiableSet(this.learningPlans);
 	}
-	public void removeLearningPlan(Integer id) {
-		this.learningPlans.removeIf(l -> l.getId().equals(id));		
+	public Integer currentLearningPlansQuantity() {
+		return this.learningPlans.size();
 	}
 }

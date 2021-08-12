@@ -76,10 +76,23 @@ public final class KnowledgeDoneManager {
 	public Set<KnowledgePiece> getKnowledgeDone() {
 		return Collections.unmodifiableSet(this.knowledgeDone);
 	}
-	public Double getAvgScore() {
-		return getAvgScoreForTypesSet(Set.of(KnowledgeType.DIAGNOSTIC_EVALUATION_ACTIVITY, 
-				KnowledgeType.FORMATIVE_EVALUATION_ACTIVITY,
-				KnowledgeType.SUMATIVE_EVALUATION_ACTIVITY));
+	
+	
+	
+	public Double generalAvgScore() {
+	Set<KnowledgeType> evaluationActivityTypes = KnowledgeType.getEvaluationActivityTypes();
+		return this.knowledgeDone.stream()
+			.filter(kp -> evaluationActivityTypes.contains(kp.getType()))
+			.mapToDouble(KnowledgePiece::getScore)
+			.average()
+			.orElse(0);
+	}
+	public Integer learningPlansConcludedQuantity() {
+		return Integer.valueOf(Long.valueOf(
+			this.knowledgeDone.stream()
+			.filter(kp -> kp.getType().equals(KnowledgeType.PEDAGOGICAL_OBJECTIVE))
+			.count())
+			.toString());
 	}
 	public Double getAvgScoreOfLast(Integer n) {
 		Set<KnowledgeType> types = KnowledgeType.getEvaluationActivityTypes();
@@ -90,11 +103,5 @@ public final class KnowledgeDoneManager {
 			.limit(n)
 			.mapToDouble(KnowledgePiece::getScore)
 			.sum();
-	}
-	
-	
-	
-	private Double getAvgScoreForTypesSet(Set<KnowledgeType> types) {
-		return Double.valueOf(this.knowledgeDone.stream().filter(p -> types.contains(p.getType())).mapToDouble(p -> p.getScore()).sum());
 	}
 }

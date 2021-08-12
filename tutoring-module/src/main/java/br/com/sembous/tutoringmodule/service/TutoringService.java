@@ -13,11 +13,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import br.com.sembous.smconsumerapi.gateway.InteractionGateway;
+import br.com.sembous.smconsumerapi.gateway.StudentGateway;
 import br.com.sembous.smconsumerapi.gateway.StudentModuleGateway;
 import br.com.sembous.smconsumerapi.model.Interaction;
+import br.com.sembous.smconsumerapi.model.KnowledgeStatus;
 import br.com.sembous.smconsumerapi.model.KnowledgeType;
 import br.com.sembous.smconsumerapi.model.LearningPlanPiece;
-import br.com.sembous.smconsumerapi.model.KnowledgeStatus;
 import br.com.sembous.smconsumerapi.model.PreferenceType;
 import br.com.sembous.smconsumerapi.model.Student;
 
@@ -28,8 +30,8 @@ public class TutoringService {
 	
 	public JsonNode prepareContentJsonToView(JsonNode rawContentJson, Integer studentId) {
 		
-		StudentModuleGateway smg = new StudentModuleGateway(restTemplate);
-		Optional<Student> optionalStudent = smg.getStudentWithPreferences(studentId); //melhor sobrecarregar o método getStudent
+		StudentGateway smg = StudentModuleGateway.getStudentGateway(restTemplate);
+		Optional<Student> optionalStudent = smg.get(studentId, Boolean.TRUE, Boolean.FALSE, Boolean.FALSE); //melhor sobrecarregar o método getStudent
 		if (optionalStudent.isEmpty()) {
 			new IllegalArgumentException("No Student found with studentId = " + studentId.toString()).printStackTrace();
 			return rawContentJson;
@@ -91,8 +93,8 @@ public class TutoringService {
 	public KnowledgeStatus getActivityStatus(Integer foreignId, LearningPlanPiece currentActivity, Double score) {
 		if (!KnowledgeType.getEvaluationActivityTypes().contains(currentActivity.getType())) return KnowledgeStatus.DONE;
 		if (score >= 70) return KnowledgeStatus.DONE;
-		StudentModuleGateway smg = new StudentModuleGateway(restTemplate);
-		List<Interaction> interactions = smg.getInteractionWithLearningPlanPiece(foreignId, currentActivity);
+		InteractionGateway smg = StudentModuleGateway.getInteractionGateway(restTemplate);
+		List<Interaction> interactions = smg.get(foreignId, currentActivity.getType(), currentActivity.getExpertModuleId());
 		if (interactions.size() >= 3) return KnowledgeStatus.BLOCKED;
 		return KnowledgeStatus.TO_DO;
 	}

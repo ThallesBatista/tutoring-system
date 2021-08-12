@@ -18,22 +18,21 @@ public class LearningPlanPiece {
 
 // PELO MENOS OS IDS ACHO QUE TENHO QUE COLOCAR NOS CONSTRUTORES
 	
-//	public LearningPlanPiece(KnowledgeType type, Integer expertModuleId, Double score, KnowledgeStatus status) {
-//		
-//		this.type = type;
-//		this.expertModuleId = expertModuleId;
-//		this.score = score;
-//		this.status = status;
-//	}
-//	public LearningPlanPiece(KnowledgeType type, Integer expertModuleId, List<LearningPlanPiece> childLPP, 
-//			KnowledgeCategory learningPlanPieceCategory, String name) {
-//		
-//		this.type = type;
-//		this.expertModuleId = expertModuleId;
-//		if (childLPP!=null) childLPP.stream().forEach(this::addChild);
-//		this.category = learningPlanPieceCategory;
-//		this.name = name;
-//	}
+	public LearningPlanPiece(KnowledgeType type, Integer expertModuleId, Double score, KnowledgeStatus status) {
+		
+		this.type = type;
+		this.expertModuleId = expertModuleId;
+		this.score = score;
+		this.status = status;
+	}
+	public LearningPlanPiece(KnowledgeType type, Integer expertModuleId, List<LearningPlanPiece> childLPP, 
+			KnowledgeCategory learningPlanPieceCategory, String name) {
+		this.type = type;
+		this.expertModuleId = expertModuleId;
+		if (childLPP!=null) childLPP.stream().forEach(this::addChild);
+		this.category = learningPlanPieceCategory;
+		this.name = name;
+	}
 //	public LearningPlanPiece(KnowledgeType type, Integer expertModuleId,
 //			List<LearningPlanPiece> childLPP, KnowledgeCategory learningPlanPieceCategory,
 //			KnowledgeStatus status, Double score, String name) {
@@ -136,5 +135,9 @@ public class LearningPlanPiece {
 			return false;
 		
 		return true;
+	}
+	public void serializable() {
+		this.fatherLPP = null;
+		this.childLPP.forEach(c -> c.serializable());		
 	}
 }
