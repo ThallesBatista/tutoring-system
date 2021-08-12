@@ -31,6 +31,9 @@ public class Teacher {
 	public PersonalInformations getPersonalInformations() {
 		return personalInformations;
 	}
+	public ClazzManager getClazzManager() {
+		return clazzManager;
+	}
 	
 	
 	@Override

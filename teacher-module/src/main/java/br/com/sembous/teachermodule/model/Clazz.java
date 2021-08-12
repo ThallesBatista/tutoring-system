@@ -1,5 +1,6 @@
 package br.com.sembous.teachermodule.model;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -8,7 +9,6 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,6 +35,27 @@ public class Clazz {
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "clazz", orphanRemoval = true, cascade = CascadeType.PERSIST)
 	private Set<ClazzLearningPlan> learningPlans;
+	
+	private String name;
+	private LocalDate createdAt;
+	
+	
+	public Integer numberOfLearningPlans() {
+		return this.learningPlans.size();
+	}
+	public Integer numberOfStudents() {
+		return this.studentsIds.size();
+	}
+	
+	public Integer getId() {
+		return id;
+	}
+	public String getName() {
+		return name;
+	}
+	public LocalDate getCreatedAt() {
+		return createdAt;
+	}
 	
 	
 	

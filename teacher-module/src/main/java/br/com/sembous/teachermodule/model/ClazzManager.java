@@ -1,5 +1,6 @@
 package br.com.sembous.teachermodule.model;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,4 +14,8 @@ public class ClazzManager {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "teacher", orphanRemoval = true, cascade = CascadeType.PERSIST)
 	private Set<Clazz> classes = new HashSet<>();
+	
+	public Set<Clazz> getClasses() {
+		return Collections.unmodifiableSet(classes);
+	}
 }
