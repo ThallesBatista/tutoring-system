@@ -29,10 +29,6 @@ public class DashboardController {
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Set<RoleValue> userRoles = user.getRoles().stream().map(Role::getRole).collect(Collectors.toSet());
 		
-		System.out.println(user.getUsername());
-		System.out.println(userRoles.contains(RoleValue.ROLE_TEACHER));
-		System.out.println(userRoles.contains(RoleValue.ROLE_STUDENT));
-		
 		if (userRoles.contains(RoleValue.ROLE_STUDENT)) {
 			Optional<Student> optional = learningPlanService.getStudentWithLearningPlansAndKnowledgeDone(user.getForeignId());
 			if (optional.isEmpty()) throw new IllegalStateException("The user has the role of a student, but was not found as one");

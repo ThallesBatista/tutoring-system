@@ -8,9 +8,11 @@ public class TeacherDto {
 	private String firstName;
 	private String lastName;
 	private String email;
+	private ClassManagerDto classManagerDto;
 	
 	public Teacher convert() {
-		return new Teacher(id, firstName, lastName, email);
+		if (classManagerDto==null) return new Teacher(id, firstName, lastName, email);
+		return new Teacher(id, firstName, lastName, email, classManagerDto.convert());
 	}
 	
 	
@@ -25,5 +27,8 @@ public class TeacherDto {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public void setClassManagerDto(ClassManagerDto classManagerDto) {
+		this.classManagerDto = classManagerDto;
 	}
 }

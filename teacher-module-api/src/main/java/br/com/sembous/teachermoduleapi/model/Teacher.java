@@ -4,7 +4,8 @@ public class Teacher {
 
 	private Integer id;
 	private PersonalInformations personalInformations;
-//	private ClazzManager clazzManager;
+	private ClazzManager clazzManager = new ClazzManager();
+	
 	
 	public Teacher(String firstName, String lastName, String email) {
 		this.personalInformations = new PersonalInformations(firstName, lastName, email);
@@ -12,7 +13,13 @@ public class Teacher {
 	public Teacher(Integer id, String firstName, String lastName, String email) {
 		this.id = id;
 		this.personalInformations = new PersonalInformations(firstName, lastName, email);
+	}	
+	public Teacher(Integer id, String firstName, String lastName, String email, ClazzManager clazzManager) {
+		this.id = id;
+		this.personalInformations = new PersonalInformations(firstName, lastName, email);
+		this.clazzManager = clazzManager;
 	}
+	
 	
 	public Integer getId() {
 		return id;
@@ -20,6 +27,10 @@ public class Teacher {
 	public PersonalInformations getPersonalInformations() {
 		return personalInformations;
 	}
+	public ClazzManager getClazzManager() {
+		return clazzManager;
+	}
+	
 	
 	@Override
 	public int hashCode() {

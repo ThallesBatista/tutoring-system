@@ -5,18 +5,67 @@
 	<div th:replace="~{base :: navbar('dashboard')}"></div>
 	<div class="container" id="core">
 		
+		{{personalInformations}} <br>
+		{{classes}}
+		
 		<div class="card mt-2">
 			<div class="card-body row align-items-center">
 				<div class = "col-3 d-flex justify-content-center">
 					<div class="text-center"><img src="https://image.flaticon.com/icons/png/512/149/149071.png" class="img-fluid" alt="..."></div>
 				</div>
 				<div class = "col offset-md-1">
-					<h5 class="card-title" th:text="professor"/>
+					<h5 class="card-title">{{personalInformations.firstName + ' ' + personalInformations.lastName}}</h5>
 					<br>
 					<br>
+					<span class="card-text">{{'Número de classes: ' + classes.length}}</span>
 				</div>
 			</div>	
 		</div>
+		
+		
+		
+		
+		<div v-if="classes.length!=0" class="card mt-5 mb-3">
+			<div class="card-header text-center align-items-center"><h4>TURMAS</h4></div>
+			
+			<div id="carouselClasses" class="carousel slide" data-bs-ride="carousel">
+	  			<div class="carousel-inner">
+	  				<div v-for="clazz in classes" 
+	  					v-bind:class="(learningPlanList.indexOf(clazz)==0) ? 'carousel-item active' : 'carousel-item'">
+
+	  					<div class="card-body row align-items-center col-md-10 offset-md-1">
+  							<div class="col-2">
+  								<h5 class="card-title">{{clazz.name}}</h5>
+  							</div>
+  							<div class="col">
+								<span class="card-text col-3">{{'Número de estudantes:   ' + clazz.numberOfStudents}}</span>
+								<br>
+								<br>
+								<br>
+								<div class="row justify-content-between align-items-center">
+									<button v-on:click="excludeClass(learningPlan.id)" type="button" class="btn btn-danger col-3">EXCLUIR</button>
+									<button v-on:click="selectClass(learningPlan.id)" type="button" class="btn btn-warning col-3">DETALHES</button>
+									<button v-on:click="studentsOfClass(learningPlan.id)" type="button" class="btn btn-success col-3">ESTUDANTES</button>
+								</div>
+			  				</div> 
+  						</div>
+  				
+	  				</div>	  				
+	 			</div>
+	  			<button class="carousel-control-prev" type="button" data-bs-target="#carouselClasses" data-bs-slide="prev">
+	    			<span class="carousel-control-prev-icon"></span>
+	    			<span class="visually-hidden">Previous</span>
+	  			</button>
+	  			<button class="carousel-control-next" type="button" data-bs-target="#carouselClasses" data-bs-slide="next">
+	    			<span class="carousel-control-next-icon"></span>
+	    			<span class="visually-hidden">Next</span>
+	  			</button>
+			</div>
+			
+		</div>
+		
+		
+		
 		
 	</div>
 	<script>
@@ -24,10 +73,29 @@
 			var app = new Vue(
 			{
 				el : '#core',
-				data : {learningPlanList: [], selectedLearningPlan: null, learningPlanId2TopicName: {}, knowledgeType2NewLabel: {}},
+				data : {personalInformations: {}, classes: []},
 				mounted () {
+					axios
+				      .get('http://localhost:8083/api/teacherDashboard/personalInformations')
+				      .then(response => {
+				    	  	this.personalInformations = response.data;
+				    	});
+					axios
+				      .get('http://localhost:8083/api/teacherDashboard/classes')
+				      .then(response => {
+				    	  	this.classes = response.data;
+				    	});
 				},
 				methods: {
+					excludeClass : function(id) {
+						console.log('exlude class');
+					},
+					selectClass : function(id) {
+						console.log('select class');
+					},
+					studentsOfClass : function(id) {
+						console.log('students of class');
+					}
 				}
 			});
 		}

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -36,14 +37,16 @@ public class TeacherController {
 		
 		URI uri = uriBuilder.path("teacher/{id}").buildAndExpand(teacher.getId()).toUri();
 		
-		return ResponseEntity.created(uri).body(new TeacherDto(teacher));
+		return ResponseEntity.created(uri).body(new TeacherDto(teacher, TeacherInformations.PERSONAL_INFORMATIONS));
 	}
 	
 	@GetMapping(path = "/{id}")
-	public ResponseEntity<TeacherDto> getOne(@PathVariable Integer id) {
+	public ResponseEntity<TeacherDto> getOne(@PathVariable Integer id, @RequestParam(required = false) TeacherInformations informations) {
+		if (informations == null) informations = TeacherInformations.PERSONAL_INFORMATIONS;
+		
 		Optional<Teacher> optional = teacherRespository.findById(id);
 		if (optional.isEmpty()) return ResponseEntity.notFound().build();
 		Teacher teacher = optional.get();
-		return ResponseEntity.ok().body(new TeacherDto(teacher));	
+		return ResponseEntity.ok().body(new TeacherDto(teacher, informations));	
 	}
 }

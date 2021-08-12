@@ -21,9 +21,9 @@ public class TeacherGateway {
 		this.restTemplate = restTemplate;
 	}
 	
-	public Optional<Teacher> get(Integer id) {
+	public Optional<Teacher> get(Integer id, TeacherInformations informations) {
 		Teacher teacher;
-		String url = this.baseUrl + "/" + id.toString();
+		String url = this.baseUrl + "/" + id.toString() + "?informations=" + informations.toString();
 		try {
 			ResponseEntity<TeacherDto> re = this.restTemplate.getForEntity(url, TeacherDto.class);
 			TeacherDto dto = re.getBody();
