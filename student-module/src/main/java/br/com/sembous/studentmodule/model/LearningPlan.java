@@ -121,6 +121,9 @@ public class LearningPlan {
 	public LearningPlanPiece getLearningPlanGraph() {
 		return learningPlanGraph;
 	}
+	public Double getProgress() {
+		return this.learningPlanGraph.getProgress();
+	}
 	public Double getAvgScore() {
 		return this.learningPlanGraph.getScore();
 	}

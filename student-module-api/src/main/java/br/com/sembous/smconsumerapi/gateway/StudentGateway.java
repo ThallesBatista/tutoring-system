@@ -22,11 +22,12 @@ public final class StudentGateway {
 	}
 	
 	
-	public Optional<Student> get(Integer id, Boolean withPreferences, Boolean withLearningPlan) {
+	public Optional<Student> get(Integer id, Boolean withPreferences, Boolean withLearningPlan, Boolean withKnowledgeDone) {
 		Student student;
 		String url = this.baseUrl + "/" + id.toString() 
 			+ "?withPreferences=" + withPreferences.toString() 
-			+ "+withLearningPlan=" + withLearningPlan.toString();
+			+ "&withLearningPlan=" + withLearningPlan.toString()
+			+ "&withKnowledgeDone=" + withKnowledgeDone.toString();
 		try {
 			ResponseEntity<StudentDto> re = this.restTemplate.getForEntity(url, StudentDto.class);
 			StudentDto dto = re.getBody();

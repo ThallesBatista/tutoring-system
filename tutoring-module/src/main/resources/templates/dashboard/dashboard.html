@@ -1,0 +1,274 @@
+<html>
+<head th:replace="~{base :: head}"></head>
+<body onload="onLoad()">
+	<div th:replace="~{base :: logo}"></div>
+	<div th:replace="~{base :: navbar('dashboard')}"></div>
+	<div class="container" id="core">
+		
+		<div class="card mt-2">
+			<div class="card-body row align-items-center">
+				<div class = "col-3 d-flex justify-content-center">
+					<div class="text-center"><img src="https://image.flaticon.com/icons/png/512/149/149071.png" class="img-fluid" alt="..."></div>
+				</div>
+				<div class = "col offset-md-1">
+					<h5 class="card-title" th:text="${student.getPersonalInformations.getFirstName}"/>
+					<br>
+					<br>
+					<span th:text="'Score geral: ' + ${student.knowledgeDoneManager.get.generalAvgScore}"/>
+					<br>
+					<span th:text="'Planos de aprendizagem concluídos: ' + ${student.knowledgeDoneManager.get.learningPlansConcludedQuantity}"/>
+					<br>
+					<span th:text="'Planos de aprendizagem atuais: ' + ${student.learningPlanManager.get.currentLearningPlansQuantity}"/>
+				</div>
+			</div>
+		</div>
+		
+<!-- 		{{learningPlanList}} -->
+<!-- 		<br> -->
+<!-- 		{{selectedLearningPlan}} -->
+		
+		
+		<div v-if="selectedLearningPlan!=null" class="card mt-5">
+			<div class="card-body row align-items-center">
+				<div class="col-2">
+					<h5 class="card-title">{{selectedLearningPlan.name}}</h5>
+					<small class="card-subtitle mb-2 text-muted">{{learningPlanId2TopicName[selectedLearningPlan.id]}}</small>
+				</div>
+				<div class="col">
+					<div class="progress">
+						<div class="progress-bar bg-success" role="progressbar" v-bind:style="'width: ' + 100*selectedLearningPlan.progress + '%'">
+							{{100*selectedLearningPlan.progress + '%'}}
+						</div>
+					</div>
+					<br>
+					<span class="card-text col-3">{{'Score: ' + selectedLearningPlan.avgScore}}</span>
+					<br>
+					<br>
+					<br>
+					<div class="row justify-content-between align-items-center">
+						<button v-on:click="excludeLearningPlan(selectedLearningPlan.id)" type="button" class="btn btn-danger col-3">EXCLUIR</button>
+						<button v-on:click="continueLearningPlan(selectedLearningPlan.id)" type="button" class="btn btn-success col-3">CONTINUAR</button>
+					</div>
+ 				</div>
+ 			</div>
+ 			
+ 			<div class="card-body">
+ 				<div class="accordion" id="accordion-POStructure">
+ 				
+					<div v-html="renderizeContentTree(selectedLearningPlan.learningPlanGraph.childLPP)"></div>
+				  	
+				</div>   	
+ 			</div> 
+		</div>
+		
+		<div class="card mt-5 mb-3">
+			<div class="card-header text-center align-items-center"><h4>Objetivos de Aprendizagem</h4></div>
+			
+			<div id="carouselLearningPlans" class="carousel slide" data-bs-ride="carousel">
+<!-- 	  			<div class="carousel-indicators">	  				 -->
+<!-- 				    <button type="button" data-bs-target="#carouselLearningPlans" data-bs-slide-to="0" class="active"></button> -->
+<!-- 				    <button type="button" data-bs-target="#carouselLearningPlans" data-bs-slide-to="1"></button> -->
+<!-- 				    <button type="button" data-bs-target="#carouselLearningPlans" data-bs-slide-to="2"></button> -->
+<!-- 	  			</div> -->
+	  			<div class="carousel-inner">
+	  				<div v-for="learningPlan in learningPlanList" 
+	  					v-bind:class="(learningPlanList.indexOf(learningPlan)==0) ? 'carousel-item active' : 'carousel-item'">
+
+	  					<div class="card-body row align-items-center col-md-10 offset-md-1">
+  							<div class="col-2">
+  								<h5 class="card-title">{{learningPlan.name}}</h5>
+  								<small class="card-subtitle mb-2 text-muted">{{learningPlanId2TopicName[learningPlan.id]}}</small>
+  							</div>
+  							<div class="col">
+			  					<div class="progress">
+			  						<div class="progress-bar bg-success" role="progressbar" v-bind:style="'width: ' + 100*learningPlan.progress + '%'">
+			  							{{100*learningPlan.progress + '%'}}
+			  						</div>
+			  					</div>
+								<br>
+								<span class="card-text col-3">{{'Score: ' + learningPlan.avgScore}}</span>
+								<br>
+								<br>
+								<br>
+								<div class="row justify-content-between align-items-center">
+									<button v-on:click="excludeLearningPlan(learningPlan.id)" type="button" class="btn btn-danger col-3">EXCLUIR</button>
+									<button v-on:click="selectLearningPlan(learningPlan.id)" type="button" class="btn btn-warning col-3">DETALHES</button>
+									<button v-on:click="continueLearningPlan(learningPlan.id)" type="button" class="btn btn-success col-3">CONTINUAR</button>
+								</div>
+			  				</div> 
+  						</div>
+  				
+	  				</div>	  				
+	 			</div>
+	  			<button class="carousel-control-prev" type="button" data-bs-target="#carouselLearningPlans" data-bs-slide="prev">
+	    			<span class="carousel-control-prev-icon"></span>
+	    			<span class="visually-hidden">Previous</span>
+	  			</button>
+	  			<button class="carousel-control-next" type="button" data-bs-target="#carouselLearningPlans" data-bs-slide="next">
+	    			<span class="carousel-control-next-icon"></span>
+	    			<span class="visually-hidden">Next</span>
+	  			</button>
+			</div>
+			
+		</div>
+				
+		
+	</div>
+	<script>
+		function onLoad() {
+			var app = new Vue(
+			{
+				el : '#core',
+				data : {learningPlanList: [], selectedLearningPlan: null, learningPlanId2TopicName: {}, knowledgeType2NewLabel: {}},
+				mounted () {
+					axios
+				      .get('http://localhost:8083/api/dashboard/learningPlans')
+				      .then(response => {
+				    	  	this.learningPlanList = response.data;
+				    	});
+					axios
+				      .get('http://localhost:8083/api/dashboard/learningPlan2TopicMap')
+				      .then(response => {
+				    	  	this.learningPlanId2TopicName = response.data;
+				    	});
+					axios
+				      .get('http://localhost:8083/api/dashboard/knowledgeType2NewLabel')
+				      .then(response => {
+				    	  	this.knowledgeType2NewLabel = response.data;
+				    	});
+				},
+				methods: {
+					selectLearningPlan : function(id) {
+						var url = 'http://localhost:8083/api/dashboard/learningPlan/' + id;
+						axios
+					      .get(url)
+					      .then(response => {
+					    	  	this.selectedLearningPlan = response.data;
+					    	});
+					},
+					excludeLearningPlan : function(id) {
+						axios.delete('http://localhost:8083/api/dashboard/learningPlan/' + id)
+					      .then(response => {
+					    	  window.location.href = 'http://localhost:8083/dashboard'
+					      });
+					},
+					continueLearningPlan : function(id) {
+						axios.put('http://localhost:8083/api/dashboard/learningPlan/' + id)
+							.then(response => {
+					    	 	 window.location.href = 'http://localhost:8083/learn'
+					     	 });
+					},
+					renderizeContentTree : function(pieces) {
+						var html = " ";
+						for (var piece of pieces) {
+							if (piece.type=="PEDAGOGICAL_OBJECTIVE" || piece.type=="NOTION" || piece.type=="CONCEPT") 
+								html += this.renderizeNonActivity(piece);
+							else 
+								html += this.renderizeActivity(piece);
+						}
+						return html;
+					},
+					renderizeNonActivity : function(piece) {
+						var html = "";
+						
+						var buttonCollor = "";
+						if (piece.status=="BLOCKED") buttonCollor = "btn-danger";
+						else if (piece.status=="DONE") buttonCollor = "btn-success";
+						else buttonCollor = "btn-warning";
+						
+						var badge = "";
+						if (piece.status=="BLOCKED") badge = "<span class='badge bg-danger ms-1'>Bloqueado</span>";
+						else if (piece.status=="DONE") badge = "<span class='badge bg-success ms-1'>Concluído</span>";
+						else badge = "";
+						
+						html += "<div class='accordion card' id='accordion" + piece.type + piece.expertModuleId +"'>";
+						
+						html += "<div class='accordion-item'>";
+						html += "<div class='accordion-header' id='flush-Heading" + piece.type + piece.expertModuleId + "'>";
+						
+						html += "<button class='accordion-button collapsed col-12 " + buttonCollor + "' type='button' data-bs-toggle='collapse'";
+	                	html += "data-bs-target='#flush-Collapse" + piece.type + piece.expertModuleId + "'>";
+	                	html += "<label for='name" + piece.type + piece.expertModuleId + "'>";
+	                	html += this.knowledgeType2NewLabel[piece.type] + ": &nbsp";
+	                	html += "</label>";
+	                	html += "<span id='name" + piece.type + piece.expertModuleId + "'>";
+	                	html += piece.name;
+	                	html += "</span>";
+	                	html += badge;
+	                	html +="</button>";
+						
+						html += "</div>";
+						html += "</div>";
+						
+						html += "<div id='flush-Collapse" + piece.type + piece.expertModuleId +"' class='accordion-collapse collapse' "; 
+						html += "data-bs-parent='#accordion" + piece.type + piece.expertModuleId + "'>";
+						html += "<div class='accordion-body'>";
+						html += "<div class='card-body mb-3 row d-flex justify-content-between'>";
+						html += "<div class='card-text col-3'>";
+						html += "Score: &nbsp" + piece.score;
+						html += "</div>";
+						html += "<div class='col'>";
+						html += "<div class='progress'>";
+						html += "<div class='progress-bar bg-success' role='progressbar' style='width: " + 100*piece.progress + "%'>"; 
+	  					html += 100*piece.progress + "%";
+						html += "</div>";
+						html += "</div>";
+						html += "</div>";
+						html += "</div>";
+						
+						if (piece.childLPP.length != 0) html += this.renderizeContentTree(piece.childLPP);
+						
+						html += "</div>";
+						html += "</div>";
+						
+						html += "</div>";
+						
+						return html;
+					},
+					renderizeActivity : function(piece) {
+						var html = "";
+						
+						var listGroupColor = "";
+						if (piece.status=="BLOCKED") listGroupColor = "list-group-item-danger";
+						else if (piece.status=="DONE") listGroupColor = "list-group-item-success";
+						else listGroupColor = "list-group-item-warning";
+						
+						var badge = "";
+						if (piece.status=="BLOCKED") badge = "<span class='badge bg-danger ms-1'>Bloqueado</span>";
+						else if (piece.status=="DONE") badge = "<span class='badge bg-success ms-1'>Concluído</span>";
+						else badge = "";
+						
+						var paragraph = "";
+						if (piece.type == "DIAGNOSTIC_EVALUATION_ACTIVITY" || piece.type == "FORMATIVE_EVALUATION_ACTIVITY" 
+								|| piece.type == "SUMATIVE_EVALUATION_ACTIVITY")
+							paragraph = "Score: &nbsp" + piece.score;
+						else
+							paragraph = "&nbsp";
+						
+						html += "<div class='list-group-item " + listGroupColor +"'>";
+						html += "<div class='d-flex w-100 justify-content-between align-items-center row mb-1'>";
+						html += "<div class='card-text col'>";
+						html += "<label for='name" + piece.type + piece.expertModuleId +"'>";
+						html += this.knowledgeType2NewLabel[piece.type] + ": &nbsp";
+						html += "</label>"
+						html += "<span id='name" + piece.type + piece.expertModuleId + "'>";
+						html += piece.name;
+						html += "</span>";
+						html += badge;
+						html += "</div>";
+						html += "<p class='mb-1 card-text col-3' >";
+						html += paragraph;
+						html += "</p>";
+						html += "</div>";
+						html += "</div>";
+						
+						return html;
+					}
+				}
+			});
+		}
+	</script>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</body>
+</html>

@@ -1,8 +1,6 @@
 package br.com.sembous.smconsumerapi.dto;
 
 import java.time.Instant;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import br.com.sembous.smconsumerapi.model.PreferenceType;
 import br.com.sembous.smconsumerapi.model.Student;
@@ -18,20 +16,19 @@ public class StudentDto {
 	private String likesTheChatbot;
 	private String likesVideos;
 	private String needsMoreTime;
-	private Set<LearningPlanSimpleDto> learningPlans;
+	private LearningPlanManagerDto learningPlanManager;
+	private KnowledgeDoneManagerDto knowledgeDoneManager;
 	
 	public Student convert() {
-		if (this.preferencesUpdatedAt == null && learningPlans == null) 
-			return new Student(id, firstName, lastName, email);
-		if (this.preferencesUpdatedAt == null)
-			return new Student(id, firstName, lastName, email, 
-					this.learningPlans.stream().map(LearningPlanSimpleDto::convert).collect(Collectors.toSet()));
-		if (learningPlans == null)
-			return new Student(id, firstName, lastName, email, PreferenceType.valueOf(likesExercises), PreferenceType.valueOf(needsMoreTime), 
-					PreferenceType.valueOf(likesVideos), PreferenceType.valueOf(likesTheChatbot), preferencesUpdatedAt);
-		return new Student(id, firstName, lastName, email, PreferenceType.valueOf(likesExercises), PreferenceType.valueOf(needsMoreTime), 
-				PreferenceType.valueOf(likesVideos), PreferenceType.valueOf(likesTheChatbot), preferencesUpdatedAt,
-				this.learningPlans.stream().map(LearningPlanSimpleDto::convert).collect(Collectors.toSet()));
+		Student student;
+		if (this.preferencesUpdatedAt == null) student = new Student(id, firstName, lastName, email);
+		else student = new Student(id, firstName, lastName, email, PreferenceType.valueOf(likesExercises), PreferenceType.valueOf(needsMoreTime), 
+				PreferenceType.valueOf(likesVideos), PreferenceType.valueOf(likesTheChatbot), preferencesUpdatedAt);
+		
+		if (learningPlanManager != null) student.setLearningPlanManager(learningPlanManager.convert());
+		if (knowledgeDoneManager != null) student.setKnowledgeDoneManager(knowledgeDoneManager.convert());		
+		
+		return student;
 	}
 	
 //	public static List<Student> convertList(Collection<StudentDto> dtos){
@@ -66,7 +63,10 @@ public class StudentDto {
 	public void setNeedsMoreTime(String needsMoreTime) {
 		this.needsMoreTime = needsMoreTime;
 	}
-	public void setLearningPlans(Set<LearningPlanSimpleDto> learningPlans) {
-		this.learningPlans = learningPlans;
+	public void setLearningPlanManager(LearningPlanManagerDto learningPlanManager) {
+		this.learningPlanManager = learningPlanManager;
+	}
+	public void setKnowledgeDoneManager(KnowledgeDoneManagerDto knowledgeDoneManager) {
+		this.knowledgeDoneManager = knowledgeDoneManager;
 	}
 }

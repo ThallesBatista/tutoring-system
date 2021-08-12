@@ -1,4 +1,4 @@
-package br.com.sembous.tutoringmodule.controller;
+package br.com.sembous.tutoringmodule.api;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -19,7 +19,7 @@ import br.com.sembous.tutoringmodule.service.LearningPlanService;
 
 @RestController
 @RequestMapping(path = "/selectObjective")
-public class SelectObjectiveController {
+public class SelectObjectiveRestController {
 	
 	@Autowired
 	private LearningPlanService learningPlanService;
@@ -31,8 +31,8 @@ public class SelectObjectiveController {
 		catch (Exception e) {e.printStackTrace();}
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Set<RoleValue> userRoles = user.getRoles().stream().map(Role::getRole).collect(Collectors.toSet());
-		if (userRoles.contains(RoleValue.ROLE_STUDENT)) learningPlanService.selectNewLearningPlan(
-				user.getForeignId(), Integer.valueOf(objectiveId));
+		if (userRoles.contains(RoleValue.ROLE_STUDENT)) 
+			learningPlanService.selectNewLearningPlan(user.getForeignId(), Integer.valueOf(objectiveId));
 		return "dashboard";
 	}
 

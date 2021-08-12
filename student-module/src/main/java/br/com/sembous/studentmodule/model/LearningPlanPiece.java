@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -35,9 +36,9 @@ public final class LearningPlanPiece {
 	private Integer expertModuleId;
 	
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-	private LearningPlanPiece fatherLPP = null;
+	private LearningPlanPiece father = null;
 	
-	@OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER, mappedBy = "fatherLPP", orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER, mappedBy = "father", orphanRemoval = true)
 	@OrderColumn(name = "`order`")
 	private List<LearningPlanPiece> childLPP = new ArrayList<>();
 	
@@ -75,7 +76,7 @@ public final class LearningPlanPiece {
 //		this.learningPlan = learningPlan;	
 //	}
 	void setFatherLPP(LearningPlanPiece fatherLPP) {
-		this.fatherLPP = fatherLPP;
+		this.father = fatherLPP;
 	}
 	Boolean updateStatus(KnowledgeStatus newStatus, Double newScore) {
 		if (this.status.equals(newStatus) && this.score.equals(newScore)) {
@@ -100,7 +101,7 @@ public final class LearningPlanPiece {
 		return id;
 	}	
 	public Optional<LearningPlanPiece> getFatherLPP() {
-		return Optional.ofNullable(this.fatherLPP);
+		return Optional.ofNullable(this.father);
 	}
 	public List<LearningPlanPiece> getChildLPP() {
 		return Collections.unmodifiableList(childLPP);
@@ -117,6 +118,16 @@ public final class LearningPlanPiece {
 	public String getName() {
 		return name;
 	}
+	public Double getProgress() {
+		List<LearningPlanPiece> flatLP = ModelUtil.learningPlanOrderListFlatter(this).stream()
+				.filter(p -> {return KnowledgeType.getActivityTypes().contains(p.getType());})
+				.collect(Collectors.toList());
+		if (flatLP.isEmpty()) return Double.valueOf(1);
+		long totalLPP = flatLP.stream().count();
+		long doneLPP = flatLP.stream().filter(p -> p.getStatus().equals(KnowledgeStatus.DONE)).count();
+		Double progress = Double.valueOf(Double.valueOf(doneLPP)/Double.valueOf(totalLPP));
+		return progress;
+	}	
 
 	@Override
 	public int hashCode() {

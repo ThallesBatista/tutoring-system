@@ -1,57 +1,50 @@
 package br.com.sembous.tutoringmodule.service;
 
-import java.util.Optional;
-
 import org.springframework.web.client.RestTemplate;
-
-import br.com.sembous.emconsumerapi.gateway.EntityGateway;
-import br.com.sembous.emconsumerapi.gateway.ExpertModuleGateway;
-import br.com.sembous.emconsumerapi.gateway.UntilValue;
-import br.com.sembous.emconsumerapi.model.PedagogicalObjective;
-import br.com.sembous.smconsumerapi.gateway.StudentModuleGateway;
-import br.com.sembous.smconsumerapi.model.LearningPlanPiece;
-import br.com.sembous.smconsumerapi.model.Student;
 
 //@Service
 public class UpdateEngine {
 
-	private RestTemplate restTemplate;
+//	private RestTemplate restTemplate;
 	
 	public UpdateEngine(RestTemplate restTemplate) {
-		this.restTemplate = restTemplate;
+//		this.restTemplate = restTemplate;
 	}
 	
-	public void update(Integer studentId, Integer objectiveId) {
-		StudentModuleGateway smg = new StudentModuleGateway(restTemplate);	
-		Optional<Student> optionalStudent = smg.getStudent(studentId);
-		if (optionalStudent.isEmpty()) return;
-		Student student = optionalStudent.get();
-		
-		LearningPlanPiece lPGraph;
-		try {
-			lPGraph = this.lPPCreatorFromExpertModule(objectiveId);
-		} catch (Exception e) {
-			return;
-		}
-		smg.update(student, lPGraph);
-	}
+//	public void update(Integer studentId, Integer objectiveId) {
+//		StudentGateway smg = StudentModuleGateway.getStudentGateway(restTemplate);	
+//		Optional<Student> optionalStudent = smg.get(studentId, Boolean.FALSE, Boolean.FALSE);
+//		if (optionalStudent.isEmpty()) return;
+//		
+//		LearningPlanPiece lPGraph;
+//		try {
+//			lPGraph = this.lPPCreatorFromExpertModule(objectiveId);
+//		} catch (Exception e) {
+//			return;
+//		}
+//		
+//		LearningPlanGateway lpg = StudentModuleGateway.getLearningPlanGateway(restTemplate);	
+//		lpg.updateLearningPlan(studentId, lPGraph);
+//	}
 
-	private LearningPlanPiece lPPCreatorFromExpertModule(Integer objectiveId) throws Exception {
-		ExpertModuleGateway emg = new ExpertModuleGateway();
-		EntityGateway<PedagogicalObjective> pog = emg.getPedagogicalObjectiveGateway(restTemplate);
-		Optional<PedagogicalObjective> optional = pog.getOne(objectiveId, UntilValue.ACTIVIY);
-		if (optional.isEmpty()) throw new Exception("There is no PedagogicalObjective with this id");
-		
-		PedagogicalObjective po = optional.get();
-		
-		return this.lPPGraphBuilder(po);
-	}
+//	private LearningPlanPiece lPPCreatorFromExpertModule(Integer objectiveId) throws Exception {
+//		ExpertModuleGateway emg = new ExpertModuleGateway();
+//		EntityGateway<PedagogicalObjective> pog = emg.getPedagogicalObjectiveGateway(restTemplate);
+//		Optional<PedagogicalObjective> optional = pog.getOne(objectiveId, UntilValue.ACTIVIY);
+//		if (optional.isEmpty()) throw new Exception("There is no PedagogicalObjective with this id");
+//		
+//		PedagogicalObjective po = optional.get();
+//		
+//		return this.lPPGraphBuilder(po);
+//	}
 
-	private LearningPlanPiece lPPGraphBuilder(PedagogicalObjective po) {
-//		List<LearningPlanPiece> notionsLPP = po.getNotions().stream().map(n -> this.lPPGraphBuilder(n)).collect(Collectors.toList());
-//		return new LearningPlanPiece(KnowledgePieceType.PEDAGOGICAL_OBJECTIVE, po.getId(), notionsLPP, LearningPlanPieceCategory.ESSENTIAL);
-		return null;
-	}
+//	private LearningPlanPiece lPPGraphBuilder(PedagogicalObjective po) {
+////		List<LearningPlanPiece> notionsLPP = po.getNotions().stream().map(n -> this.lPPGraphBuilder(n)).collect(Collectors.toList());
+////		return new LearningPlanPiece(KnowledgePieceType.PEDAGOGICAL_OBJECTIVE, po.getId(), notionsLPP, LearningPlanPieceCategory.ESSENTIAL);
+//		return null;
+//	}
+	
+	//////////////////////////////////  DAQUI PRA CIMA ERA NOVO  ////////////////////////////////////////////
 
 //	private LearningPlanPiece lPPGraphBuilder(Notion notion) {
 //		List<LearningPlanPiece> conceptsLPP = notion.getConcepts().stream().map(c -> this.lPPGraphBuilder(c)).collect(Collectors.toList());

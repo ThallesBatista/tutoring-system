@@ -34,7 +34,7 @@ public class PreferencesDeducerService {
 	
 	
 	private void updateNeedsMoreTime(Student student) { //ponderar com atividades mais recentes
-		Double historicalAvgScore = student.getKnowledgeManager().getAvgScore();
+		Double historicalAvgScore = student.getKnowledgeManager().generalAvgScore();
 		Double recentAvgScore = student.getKnowledgeManager().getAvgScoreOfLast(10);
 		Double performanceFactor = Double.valueOf((historicalAvgScore + recentAvgScore)/2);		
 		

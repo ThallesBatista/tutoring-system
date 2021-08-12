@@ -1,11 +1,7 @@
 br/com/sembous/smconsumerapi/gateway/StudentModuleGateway.class
-br/com/sembous/smconsumerapi/model/KnowledgePieceType.class
-br/com/sembous/smconsumerapi/model/PersonalInformations.class
 br/com/sembous/smconsumerapi/model/LearningPlanPiece.class
-br/com/sembous/smconsumerapi/form/StudentForm.class
-br/com/sembous/smconsumerapi/model/LearningPlanPieceStatus.class
 br/com/sembous/smconsumerapi/dto/StudentDto.class
-br/com/sembous/smconsumerapi/form/LearningPlanForm.class
-br/com/sembous/smconsumerapi/model/LearningPlanPieceCategory.class
 br/com/sembous/smconsumerapi/model/Student.class
 br/com/sembous/smconsumerapi/model/LearningPlanManager.class
+br/com/sembous/smconsumerapi/model/PersonalInformations.class
+br/com/sembous/smconsumerapi/form/StudentForm.class

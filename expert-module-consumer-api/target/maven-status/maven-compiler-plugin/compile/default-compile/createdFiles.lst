@@ -1,4 +1,3 @@
-br/com/sembous/emconsumerapi/dto/Dto.class
 br/com/sembous/emconsumerapi/gateway/implementation/ConceptGateway.class
 br/com/sembous/emconsumerapi/model/Concept.class
 br/com/sembous/emconsumerapi/gateway/EntityGateway.class
@@ -7,17 +6,18 @@ br/com/sembous/emconsumerapi/gateway/implementation/GatewayUtil.class
 br/com/sembous/emconsumerapi/gateway/ExpertModuleGateway.class
 br/com/sembous/emconsumerapi/model/ActivitySubtype.class
 br/com/sembous/emconsumerapi/model/Topic.class
+br/com/sembous/emconsumerapi/dto/NotionDto.class
+br/com/sembous/emconsumerapi/gateway/implementation/PedagogicalObjectiveGateway.class
+br/com/sembous/emconsumerapi/gateway/implementation/NotionGateway.class
+br/com/sembous/emconsumerapi/model/PedagogicalObjective.class
+br/com/sembous/emconsumerapi/dto/Dto.class
 br/com/sembous/emconsumerapi/dto/TopicDto.class
 br/com/sembous/emconsumerapi/gateway/implementation/TopicGateway.class
 br/com/sembous/emconsumerapi/model/ActivityType.class
-br/com/sembous/emconsumerapi/dto/NotionDto.class
-br/com/sembous/emconsumerapi/gateway/implementation/PedagogicalObjectiveGateway.class
 br/com/sembous/emconsumerapi/dto/ActivityDto.class
-br/com/sembous/emconsumerapi/gateway/implementation/NotionGateway.class
 br/com/sembous/emconsumerapi/gateway/implementation/UrlUtil.class
 br/com/sembous/emconsumerapi/dto/PedagogicalObjectiveDto.class
 br/com/sembous/emconsumerapi/gateway/UntilValue.class
 br/com/sembous/emconsumerapi/model/Activity.class
 br/com/sembous/emconsumerapi/model/Notion.class
 br/com/sembous/emconsumerapi/dto/ConceptDto.class
-br/com/sembous/emconsumerapi/model/PedagogicalObjective.class

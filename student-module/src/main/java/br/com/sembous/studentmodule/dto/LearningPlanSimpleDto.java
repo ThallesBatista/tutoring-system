@@ -10,12 +10,16 @@ public class LearningPlanSimpleDto {
 	private Integer expertModuleId;	
 	private String name;
 	private Instant updatedAt;
+	private Double progress;
+	private Double avgScore;
 	
 	public LearningPlanSimpleDto(LearningPlan learningPlan) {
 		this.id = learningPlan.getId();
 		this.expertModuleId = learningPlan.getExpertModuleId();
 		this.name = learningPlan.getName();
 		this.updatedAt = learningPlan.getUpdatedAt();
+		this.progress = learningPlan.getProgress();
+		this.avgScore = learningPlan.getAvgScore();
 	}
 	
 	public Integer getId() {
@@ -29,5 +33,11 @@ public class LearningPlanSimpleDto {
 	}
 	public Instant getUpdatedAt() {
 		return updatedAt;
+	}
+	public Double getProgress() {
+		return progress;
+	}
+	public Double getAvgScore() {
+		return avgScore;
 	}
 }

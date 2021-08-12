@@ -4,6 +4,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,10 +24,9 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.sembous.smconsumerapi.model.LearningPlanManager;
-import br.com.sembous.smconsumerapi.model.LearningPlanPiece;
 import br.com.sembous.smconsumerapi.model.KnowledgeStatus;
-import br.com.sembous.smconsumerapi.model.Student;
+import br.com.sembous.smconsumerapi.model.LearningPlan;
+import br.com.sembous.smconsumerapi.model.LearningPlanPiece;
 import br.com.sembous.tutoringmodule.config.security.Role;
 import br.com.sembous.tutoringmodule.config.security.RoleValue;
 import br.com.sembous.tutoringmodule.config.security.User;
@@ -44,20 +45,14 @@ public class LearnRestController {
 	private TutoringService tutoringService;
 
 	@GetMapping(path="/content")
-	public ResponseEntity<JsonNode> getContent(Model model) throws JsonMappingException, JsonProcessingException {
+	public ResponseEntity<JsonNode> getContent(Model model, HttpSession session) throws JsonMappingException, JsonProcessingException {
 		
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Set<RoleValue> userRoles = user.getRoles().stream().map(Role::getRole).collect(Collectors.toSet());
 		if (userRoles.contains(RoleValue.ROLE_STUDENT)) {
-			Optional<Student> optional = learningPlanService.getLearningPlan(user.getForeignId());
-			if (optional.isEmpty()) throw new IllegalStateException("The user has the role of a student, but was not found as one");
 			
-			Student student = optional.get();			
-			Optional<LearningPlanManager> optionalLPM = student.getLearningPlanManager();
-			if (optionalLPM.isEmpty()) return ResponseEntity.ok(learningPlanService.newStudentContentJson());
-			
-			LearningPlanManager lpm = optionalLPM.get();			
-			Optional<LearningPlanPiece> optionalActivity = lpm.getNextActivity();
+			LearningPlan learningPlan = (LearningPlan) session.getAttribute("currentLearningPlan");
+			Optional<LearningPlanPiece> optionalActivity = learningPlan.getNextActivity();
 			if (optionalActivity.isEmpty()) return ResponseEntity.ok(learningPlanService.noMoreActivitiesContentJson());
 			
 			LearningPlanPiece activity = optionalActivity.get();
@@ -66,7 +61,7 @@ public class LearnRestController {
 			if (optionalContent.isEmpty()) return ResponseEntity.ok(learningPlanService.contentNotFoundJson());
 			
 			JsonNode rawContentJson = optionalContent.get();
-			JsonNode contentJson = tutoringService.prepareContentJsonToView(rawContentJson.get("content"), student.getId());
+			JsonNode contentJson = tutoringService.prepareContentJsonToView(rawContentJson.get("content"), user.getForeignId());
 			
 			return ResponseEntity.ok(contentJson);
 		}
@@ -85,16 +80,21 @@ public class LearnRestController {
 	}
 	
 	@PostMapping(path="/finishActivity")
-	public String finishActivity(Model model, ObjectMapper mapper) { // comportamento só deve ser chamado se a atividade for do tipo evaluation;		
+	public String finishActivity(Model model, ObjectMapper mapper, HttpSession session) { // comportamento só deve ser chamado se a atividade for do tipo evaluation;		
 		Double score = tutoringService.calculeScore((JsonNode)model.getAttribute("responses"));
 		
 		LearningPlanPiece currentActivity = (LearningPlanPiece) model.getAttribute("currentActivity");
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();		
 		KnowledgeStatus status = tutoringService.getActivityStatus(user.getForeignId(), currentActivity, score);
 		
-		learningPlanService.activityDone(user.getForeignId(), currentActivity, score, status);
+		LearningPlan learningPlan = (LearningPlan) session.getAttribute("currentLearningPlan");
+		LearningPlan newLearningPlan = learningPlanService.activityDone(learningPlan.getId(), currentActivity, score, status);
+		session.setAttribute("currentLearningPlan", newLearningPlan);
 		
 		model.addAttribute("responses",this.responses(mapper));
+		
+		Optional<LearningPlanPiece> optionalActivity = newLearningPlan.getNextActivity();
+		if (optionalActivity.isPresent()) return "learn";
 		return "dashboard";
 	}
 	

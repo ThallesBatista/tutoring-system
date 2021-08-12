@@ -36,13 +36,14 @@ public class StudentController {
 	@GetMapping(path = "/{id}")
 	public ResponseEntity<StudentDto> getOne(@PathVariable Integer id, 
 			@RequestParam(defaultValue = "false") Boolean withPreferences, 
-			@RequestParam(defaultValue = "false") Boolean withLearningPlan) {
+			@RequestParam(defaultValue = "false") Boolean withLearningPlan,
+			@RequestParam(defaultValue = "false") Boolean withKnowledgeDone) {
 		Optional<Student> optional = studentRepository.findById(id);
 		if (optional.isEmpty()) return ResponseEntity.notFound().build();
 		Student student = optional.get();
 		
 		if (withPreferences) preferencesDeducerService.update(student);
-		return ResponseEntity.ok().body(new StudentDto(student, withPreferences, withLearningPlan));	
+		return ResponseEntity.ok().body(new StudentDto(student, withPreferences, withLearningPlan, withKnowledgeDone));	
 	}
 	
 	@PostMapping
@@ -53,7 +54,7 @@ public class StudentController {
 		
 		URI uri = uriBuilder.path("student/{id}").buildAndExpand(student.getId()).toUri();
 		
-		return ResponseEntity.created(uri).body(new StudentDto(student, Boolean.FALSE, Boolean.FALSE));
+		return ResponseEntity.created(uri).body(new StudentDto(student, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE));
 	}
 	
 //	@PutMapping(path = "/{id}")
