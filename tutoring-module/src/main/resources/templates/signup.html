@@ -7,7 +7,7 @@
 	<div class="container">
 		
 		<div class="card mb-3">
-			<form th:action="@{/signup}" class="card-body" method="post">
+			<form th:action="@{/signup}" class="card-body form-group" method="post">
 			
 				<div class="row justify-content-between">
 					<div class="form-group col-6">
@@ -18,13 +18,13 @@
 						<label for="lastName">Sobrenome</label>
 						<input name="lastName" type="text" class="form-control" placeholder="Sobrenome"/>
 					</div>
-					<div class="form-group col-6">
+					<div class="form-group col-6 mt-2">
 						<label for="email">Email</label>
-						<input name="email" type="email"  class="form-control" placeholder="jdklsajfsa@dsads.dsa"/>
+						<input name="email" type="email"  class="form-control" placeholder="username@email.com"/>
 					</div>
 				</div>
 				
-				<div class="row justify-content-between">
+				<div class="row justify-content-between mt-5">
 					<div class="form-group col-6">
 						<label for="username">Usuário</label>
 						<input type="text" name="username" class="form-control" placeholder="nome de usuario"/>
@@ -33,9 +33,16 @@
 						<label for="password">Senha</label>
 						<input type="password" name="password" class="form-control" placeholder="senha"/>
 					</div>
+					<div class="form-group col-6 mt-2">
+						<label for="role">Você é:</label>
+						<select name="role" id="role" class="form-control">
+							<option value="ROLE_STUDENT">Estudante</option>
+							<option value="ROLE_TEACHER">Professor</option>
+						</select> 
+					</div>
 				</div>
 				
-				<button class="btn btn-primary" type="submit">Cadastrar</button>
+				<button class="btn btn-primary mt-5" type="submit">Cadastrar</button>
 			</form>
 		</div>
 		

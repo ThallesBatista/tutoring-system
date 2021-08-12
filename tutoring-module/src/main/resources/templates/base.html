@@ -51,7 +51,7 @@
 <div th:fragment="navbar(value)">
 	<nav class="navbar navbar-expand navbar-dark bg-dark d-flex justify-content-between">
 	<div class="navbar-nav">
-		<a th:classappend="${value} == 'learn' ? 'active'" class="nav-item nav-link mr-4" th:href="@{/learn}">Continuar Aprendendo</a>
+<!-- 		<a th:classappend="${value} == 'learn' ? 'active'" class="nav-item nav-link mr-4" th:href="@{/learn}">Continuar Aprendendo</a> -->
 		<a th:classappend="${value} == 'dashboard' ? 'active'" class="nav-item nav-link mr-4" th:href="@{/dashboard}">Dashboard</a>
 		<a th:classappend="${value} == 'content' ? 'active'" class="nav-item nav-link mr-4" th:href="@{/content}">Conteúdo</a>
 	</div>
