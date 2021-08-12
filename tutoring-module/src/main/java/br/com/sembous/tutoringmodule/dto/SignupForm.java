@@ -10,7 +10,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import br.com.sembous.smconsumerapi.model.Student;
 import br.com.sembous.tutoringmodule.config.security.Role;
+import br.com.sembous.tutoringmodule.config.security.RoleValue;
 import br.com.sembous.tutoringmodule.config.security.User;
+import br.com.sembous.tutoringmodule.config.validation.ValueOfEnum;
 
 public class SignupForm {
 	@NotNull @Length(max = 19)
@@ -23,6 +25,8 @@ public class SignupForm {
 	private String username;
 	@NotNull @Length(max = 49)
 	private String password;
+	@NotNull @ValueOfEnum(enumClass = RoleValue.class)
+	private String role;
 	
 	
 	public User convert(Integer foreignId, Set<Role> roles) {
@@ -48,5 +52,11 @@ public class SignupForm {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public void setRole(String role) {
+		this.role = role;
+	}
+	public RoleValue getRole() {
+		return RoleValue.valueOf(role);
 	}
 }
