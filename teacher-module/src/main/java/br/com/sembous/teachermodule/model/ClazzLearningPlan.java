@@ -1,5 +1,6 @@
 package br.com.sembous.teachermodule.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -34,7 +35,7 @@ public class ClazzLearningPlan {
 	@ElementCollection
 	@CollectionTable(name = "class_learning_plan_students_ids", joinColumns=@JoinColumn(name = "class_learning_plan_id", referencedColumnName = "id"))
 	@Column(name = "student_id")
-	private Set<Integer> studentsIds;
+	private Set<Integer> studentsIds = new HashSet<>();
 	
 	
 	private Double generalScore = Double.valueOf(0);
@@ -46,6 +47,7 @@ public class ClazzLearningPlan {
 	private Integer expertModuleId;
 	private String name;
 	
+	public ClazzLearningPlan() {}	
 	public ClazzLearningPlan(ClazzLearningPlanPiece clazzLPP, Clazz clazz) {
 		this.clazz = clazz;
 		this.learningPlanGraph = clazzLPP;

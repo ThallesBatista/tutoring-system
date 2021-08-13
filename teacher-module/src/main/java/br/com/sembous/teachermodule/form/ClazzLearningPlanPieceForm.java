@@ -19,11 +19,11 @@ public class ClazzLearningPlanPieceForm {
 
 	private List<@Valid ClazzLearningPlanPieceForm> childLPP = new ArrayList<>();
 	@NotNull @ValueOfEnum(enumClass = KnowledgeType.class)
-	private KnowledgeType type;
+	private String type;
 	@NotNull
 	private Integer expertModuleId;
 	@NotNull @ValueOfEnum(enumClass = KnowledgeCategory.class)
-	private KnowledgeCategory category;
+	private String category;
 	@NotNull @Length(max = 50)
 	private String name;
 	
@@ -31,20 +31,20 @@ public class ClazzLearningPlanPieceForm {
 	public ClazzLearningPlanPiece convert() {
 		List<ClazzLearningPlanPiece> childLPPConverted = new ArrayList<>();
 		childLPPConverted = this.childLPP.stream().map(ClazzLearningPlanPieceForm::convert).collect(Collectors.toList());
-		return new ClazzLearningPlanPiece(childLPPConverted, type, expertModuleId, category, name);
+		return new ClazzLearningPlanPiece(childLPPConverted, KnowledgeType.valueOf(type), expertModuleId, KnowledgeCategory.valueOf(category), name);
 	}
 	
 	
 	public void setChildLPP(List<ClazzLearningPlanPieceForm> childLPP) {
 		this.childLPP = childLPP;
 	}
-	public void setType(KnowledgeType type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 	public void setExpertModuleId(Integer expertModuleId) {
 		this.expertModuleId = expertModuleId;
 	}
-	public void setCategory(KnowledgeCategory category) {
+	public void setCategory(String category) {
 		this.category = category;
 	}
 	public void setName(String name) {
