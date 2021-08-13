@@ -48,7 +48,10 @@
 								<br>
 								<br>
 								<div class="row justify-content-between align-items-center">
-									<button v-on:click="excludeClass(clazz.id)" type="button" class="btn btn-danger col-3">EXCLUIR</button>
+<!-- 									<button v-on:click="excludeClass(clazz.id)" type="button" class="btn btn-danger col-3">EXCLUIR</button> -->
+									<button v-on:click="selectClassToExlude(clazz)" type="button" class="btn btn-danger col-3" data-bs-toggle="modal" data-bs-target="#remove">
+			  							EXCLUIR
+									</button>
 									<button v-on:click="selectClass(clazz.id)" type="button" class="btn btn-warning col-3">DETALHES</button>
 									<button v-on:click="studentsOfClass(clazz.id)" type="button" class="btn btn-success col-3">ESTUDANTES</button>
 								</div>
@@ -69,6 +72,29 @@
 			
 		</div>
 		
+<!-- 		Modal de Exlusão      -->
+		<div class="modal fade" id="remove" tabindex="-1">
+		  	<div class="modal-dialog">
+		    	<div class="modal-content">
+		      		<div class="modal-header">
+<!-- 			        		<h5 class="modal-title" id="exampleModalLabel">Dica</h5> -->
+		        		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		      		</div>
+		      		<div class="modal-body align-self-center align-items-center">
+		      			<span class="card-text">{{'Tem certeza que deseja excluir a turma ' + classToExclude.name + '?'}}</span>
+		      			<br>
+		      			<br>
+		      			<div class="row justify-content-between align-items-center">
+		      				<button v-on:click="dontExcludeClass()" type="button" class="btn btn-success btm-sm col-3" 
+		      				data-bs-dismiss="modal" aria-label="Close">NÃO</button>
+		      				<button v-on:click="excludeClass(classToExclude.id)" type="button" class="btn btn-danger btm-sm col-3" 
+		      				data-bs-dismiss="modal" aria-label="Close">SIM</button>
+		      			</div>
+		      		</div>
+		    	</div>
+		  	</div>
+		</div>
+		
 		
 		
 		
@@ -78,7 +104,7 @@
 			var app = new Vue(
 			{
 				el : '#core',
-				data : {personalInformations: {}, classes: []},
+				data : {personalInformations: {}, classes: [], classToExclude: {}},
 				mounted () {
 					axios
 				      .get('http://localhost:8083/api/teacherDashboard/personalInformations')
@@ -92,8 +118,17 @@
 				    	});
 				},
 				methods: {
+					selectClassToExlude : function(clazz) {
+						this.classToExclude = clazz;
+					},
+					dontExcludeClass : function() {
+						this.classToExclude = {};
+					},
 					excludeClass : function(id) {
-						console.log('exlude class');
+						axios.delete('http://localhost:8083/api/teacherDashboard/class/' + id)
+					      .then(response => {
+					    	  window.location.href = 'http://localhost:8083/dashboard'
+					      });
 					},
 					selectClass : function(id) {
 						console.log('select class');

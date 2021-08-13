@@ -68,6 +68,9 @@ public class Clazz {
 	public LocalDate getCreatedAt() {
 		return createdAt;
 	}
+	public Teacher getTeacher() {
+		return teacher;
+	}
 	
 	
 	

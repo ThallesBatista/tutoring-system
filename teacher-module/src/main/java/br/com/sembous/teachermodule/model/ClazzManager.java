@@ -20,6 +20,9 @@ public class ClazzManager {
 		clazz.setTeacher(teacher);
 		this.classes.add(clazz);
 	}
+	public void removeClazz(Clazz clazz) {
+		this.classes.removeIf(clazz::equals);
+	}
 	
 	
 	public Set<Clazz> getClasses() {

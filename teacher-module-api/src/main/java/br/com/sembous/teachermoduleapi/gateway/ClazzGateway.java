@@ -39,4 +39,18 @@ public class ClazzGateway {
 		
 		return Optional.ofNullable(clazzResponse);
 	}
+
+
+	public Boolean remove(Integer id) {
+		String url = this.baseUrl + "/" + id.toString();
+		try {
+			this.restTemplate.delete(url);
+			return Boolean.TRUE;
+		} catch (ResourceAccessException e) {
+			return Boolean.FALSE;
+		} catch (HttpClientErrorException e) {
+			if (e.getStatusCode().equals(HttpStatus.NOT_FOUND)) return Boolean.FALSE;
+			else throw e;
+		}
+	}
 }

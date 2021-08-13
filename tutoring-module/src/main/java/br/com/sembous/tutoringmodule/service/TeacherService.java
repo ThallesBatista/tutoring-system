@@ -34,4 +34,9 @@ public class TeacherService {
 		clazzGateway.create(clazz, teacherId);
 	}
 
+	public void removeClass(Integer id) {
+		ClazzGateway clazzGateway = TeacherModuleGateway.getClazzGateway(restTemplate);		
+		clazzGateway.remove(id);
+	}
+
 }

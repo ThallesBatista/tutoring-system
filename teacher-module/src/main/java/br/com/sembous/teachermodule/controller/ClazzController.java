@@ -8,7 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.sembous.teachermodule.dto.ClazzDto;
 import br.com.sembous.teachermodule.dto.ClazzSimpleDto;
 import br.com.sembous.teachermodule.form.ClazzForm;
 import br.com.sembous.teachermodule.model.Clazz;
@@ -51,11 +50,24 @@ public class ClazzController {
 		return ResponseEntity.created(uri).body(new ClazzSimpleDto(clazz));
 	}
 	
-	@GetMapping(path = "/{id}")
-	public ResponseEntity<ClazzDto> getOne(@PathVariable Integer id) {
+	@DeleteMapping(path = "/{id}")
+	@Transactional
+	public ResponseEntity<?> delete(@PathVariable(name = "id") Integer id){
 		Optional<Clazz> optional = clazzRepository.findById(id);
 		if (optional.isEmpty()) return ResponseEntity.notFound().build();
 		Clazz clazz = optional.get();
-		return ResponseEntity.ok().body(new ClazzDto(clazz));	
+		
+		Teacher teacher = clazz.getTeacher();
+		teacher.getClazzManager().removeClazz(clazz);
+		
+		return ResponseEntity.ok().build();
 	}
+	
+//	@GetMapping(path = "/{id}")
+//	public ResponseEntity<ClazzDto> getOne(@PathVariable Integer id) {
+//		Optional<Clazz> optional = clazzRepository.findById(id);
+//		if (optional.isEmpty()) return ResponseEntity.notFound().build();
+//		Clazz clazz = optional.get();
+//		return ResponseEntity.ok().body(new ClazzDto(clazz));	
+//	}
 }
