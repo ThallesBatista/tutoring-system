@@ -15,7 +15,7 @@ public class ClazzLearningPlanSimpleDto {
 	private Integer expertModuleId;
 	private String name;
 	
-	private ClazzLearningPlanSimpleDto(ClazzLearningPlan learningPlan) {
+	public ClazzLearningPlanSimpleDto(ClazzLearningPlan learningPlan) {
 		this.id = learningPlan.getId();
 		this.generalScore = learningPlan.getGeneralScore();
 		this.numberOfStudentsDoing = learningPlan.numberOfStudentsDoing();

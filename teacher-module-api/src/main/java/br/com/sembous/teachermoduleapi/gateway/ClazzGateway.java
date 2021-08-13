@@ -18,7 +18,7 @@ public class ClazzGateway {
 	private final RestTemplate restTemplate;
 	private final String baseUrl = "http://localhost:8084/class";
 	
-	public ClazzGateway(RestTemplate restTemplate) {
+	ClazzGateway(RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
 	}
 

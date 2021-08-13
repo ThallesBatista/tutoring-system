@@ -53,6 +53,13 @@ public class Clazz {
 	}
 	
 	
+	public ClazzLearningPlan addLearningPlan(ClazzLearningPlanPiece clazzLPP) {
+		ClazzLearningPlan clazzLearningPlan = new ClazzLearningPlan(clazzLPP, this);
+		this.learningPlans.add(clazzLearningPlan);
+		return clazzLearningPlan;
+	}
+	
+	
 	public Integer numberOfLearningPlans() {
 		return this.learningPlans.size();
 	}

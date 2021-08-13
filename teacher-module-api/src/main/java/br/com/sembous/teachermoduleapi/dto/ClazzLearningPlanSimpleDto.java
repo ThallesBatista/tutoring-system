@@ -15,7 +15,7 @@ public class ClazzLearningPlanSimpleDto {
 	private Integer expertModuleId;
 	private String name;
 	
-	private ClazzLearningPlan convert() {
+	public ClazzLearningPlan convert() {
 		return new ClazzLearningPlan(id, generalScore, numberOfStudentsDoing, numberOfStudentsDone, numberOfStudentsBlocked, expertModuleId, name);
 	}
 	

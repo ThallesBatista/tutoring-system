@@ -46,7 +46,12 @@ public class ClazzLearningPlan {
 	private Integer expertModuleId;
 	private String name;
 	
-	
+	public ClazzLearningPlan(ClazzLearningPlanPiece clazzLPP, Clazz clazz) {
+		this.clazz = clazz;
+		this.learningPlanGraph = clazzLPP;
+		this.expertModuleId = clazzLPP.getExpertModuleId();
+		this.name = clazzLPP.getName();
+	}
 	
 	public Integer numberOfStudentsDoing() {
 		return this.studentsIds.size();
