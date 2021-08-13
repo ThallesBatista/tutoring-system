@@ -1,6 +1,7 @@
 package br.com.sembous.teachermodule.model;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -31,13 +32,24 @@ public class Clazz {
 	@ElementCollection
 	@CollectionTable(name = "class_students_ids", joinColumns=@JoinColumn(name = "class_id", referencedColumnName = "id"))
 	@Column(name = "student_id")
-	private Set<Integer> studentsIds;
+	private Set<Integer> studentsIds = new HashSet<>();
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "clazz", orphanRemoval = true, cascade = CascadeType.PERSIST)
-	private Set<ClazzLearningPlan> learningPlans;
+	private Set<ClazzLearningPlan> learningPlans  = new HashSet<>();;
 	
 	private String name;
 	private LocalDate createdAt;
+	
+	
+	public Clazz() {}
+	public Clazz(String name, LocalDate createdAt) {
+		this.name = name;
+		this.createdAt = createdAt;
+	}
+	
+	void setTeacher(Teacher teacher) {
+		this.teacher = teacher;
+	}
 	
 	
 	public Integer numberOfLearningPlans() {

@@ -22,6 +22,10 @@ public class Clazz {
 		this.numberOfLearningPlans = numberOfLearningPlans;
 		this.numberOfStudents = numberOfStudents;
 	}
+	public Clazz(String name) {
+		this.name = name;
+		this.createdAt = LocalDate.now();
+	}
 	
 	
 	public Integer getId() {

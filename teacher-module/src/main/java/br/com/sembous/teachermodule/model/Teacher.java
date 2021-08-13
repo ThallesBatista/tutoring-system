@@ -23,6 +23,11 @@ public class Teacher {
 	public Teacher(String firstName, String lastName, String email) {
 		this.personalInformations = new PersonalInformations(firstName, lastName, email);
 	}
+	
+
+	public void addClazz(Clazz clazz) {
+		this.clazzManager.addClazz(clazz, this);
+	}
 
 
 	public Integer getId() {
