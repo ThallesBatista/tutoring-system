@@ -7,4 +7,8 @@ public interface TeacherModuleGateway {
 	public static TeacherGateway getTeacherGateway(RestTemplate restTemplate) {
 		return new TeacherGateway(restTemplate);
 	}
+	
+	public static ClazzGateway getClazzGateway(RestTemplate restTemplate) {
+		return new ClazzGateway(restTemplate);
+	}
 }
