@@ -144,7 +144,7 @@
 				      .get('http://localhost:8083/api/class/class')
 				      .then(response => {
 				    	  	this.clazz = response.data;
-				    	  	this.learningPlans = response.date.learningPlans;
+				    	  	this.learningPlans = response.data.learningPlans;
 				    	});
 // 					axios
 // 				      .get('http://localhost:8083/api/class/learningPlans')
