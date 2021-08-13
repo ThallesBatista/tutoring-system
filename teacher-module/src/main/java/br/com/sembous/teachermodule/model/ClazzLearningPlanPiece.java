@@ -41,11 +41,14 @@ public class ClazzLearningPlanPiece {
 	@Enumerated(EnumType.STRING)
 	private KnowledgeType type;
 	
+	@Column(name = "expert_module_id")
+	private Integer expertModuleId;
+	
 	@Enumerated(EnumType.STRING)
 	private KnowledgeCategory category;
 	
 	private String name;
-	
+
 	
 	@Enumerated(EnumType.STRING)
 	private Applicability applicability;

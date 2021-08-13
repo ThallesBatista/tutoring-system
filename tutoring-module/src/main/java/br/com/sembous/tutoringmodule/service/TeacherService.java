@@ -39,4 +39,9 @@ public class TeacherService {
 		clazzGateway.remove(id);
 	}
 
+	public Optional<Clazz> getClazz(Integer classId) {
+		ClazzGateway clazzGateway = TeacherModuleGateway.getClazzGateway(restTemplate);
+		return clazzGateway.get(classId);
+	}
+
 }

@@ -38,12 +38,39 @@ public class ClazzLearningPlan {
 	
 	
 	private Double generalScore = Double.valueOf(0);
+//	private Integer numberOfStudentsDoing = Integer.valueOf(0);
 	private Integer numberOfStudentsDone = Integer.valueOf(0);
 	private Integer numberOfStudentsBlocked = Integer.valueOf(0);
 	
 	@Column(name = "expert_module_id")
 	private Integer expertModuleId;
 	private String name;
+	
+	
+	
+	public Integer numberOfStudentsDoing() {
+		return this.studentsIds.size();
+	}
+	
+	public Integer getId() {
+		return id;
+	}
+	public Double getGeneralScore() {
+		return generalScore;
+	}
+	public Integer getNumberOfStudentsDone() {
+		return numberOfStudentsDone;
+	}
+	public Integer getNumberOfStudentsBlocked() {
+		return numberOfStudentsBlocked;
+	}
+	public Integer getExpertModuleId() {
+		return expertModuleId;
+	}
+	public String getName() {
+		return name;
+	}
+	
 	
 	
 	@Override

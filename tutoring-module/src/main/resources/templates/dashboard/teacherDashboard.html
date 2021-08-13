@@ -5,8 +5,8 @@
 	<div th:replace="~{base :: navbar('dashboard')}"></div>
 	<div class="container" id="core">
 		
-		{{personalInformations}} <br>
-		{{classes}}
+<!-- 		{{personalInformations}} <br> -->
+<!-- 		{{classes}} -->
 		
 		<div class="card mt-2">
 			<div class="card-body row align-items-center">
@@ -131,7 +131,7 @@
 					      });
 					},
 					selectClass : function(id) {
-						console.log('select class');
+						window.location.href = 'http://localhost:8083/class/' + id;
 					},
 					studentsOfClass : function(id) {
 						console.log('students of class');

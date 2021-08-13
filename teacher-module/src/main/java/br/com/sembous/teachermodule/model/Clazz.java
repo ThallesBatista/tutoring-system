@@ -1,6 +1,7 @@
 package br.com.sembous.teachermodule.model;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -71,7 +72,12 @@ public class Clazz {
 	public Teacher getTeacher() {
 		return teacher;
 	}
-	
+	public Set<Integer> getStudentsIds() {
+		return Collections.unmodifiableSet(studentsIds);
+	}
+	public Set<ClazzLearningPlan> getLearningPlans() {
+		return Collections.unmodifiableSet(learningPlans);
+	}
 	
 	
 	@Override
