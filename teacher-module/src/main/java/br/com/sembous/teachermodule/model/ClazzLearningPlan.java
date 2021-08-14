@@ -1,5 +1,6 @@
 package br.com.sembous.teachermodule.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -34,16 +35,49 @@ public class ClazzLearningPlan {
 	@ElementCollection
 	@CollectionTable(name = "class_learning_plan_students_ids", joinColumns=@JoinColumn(name = "class_learning_plan_id", referencedColumnName = "id"))
 	@Column(name = "student_id")
-	private Set<Integer> studentsIds;
+	private Set<Integer> studentsIds = new HashSet<>();
 	
 	
 	private Double generalScore = Double.valueOf(0);
+//	private Integer numberOfStudentsDoing = Integer.valueOf(0);
 	private Integer numberOfStudentsDone = Integer.valueOf(0);
 	private Integer numberOfStudentsBlocked = Integer.valueOf(0);
 	
 	@Column(name = "expert_module_id")
 	private Integer expertModuleId;
 	private String name;
+	
+	public ClazzLearningPlan() {}	
+	public ClazzLearningPlan(ClazzLearningPlanPiece clazzLPP, Clazz clazz) {
+		this.clazz = clazz;
+		this.learningPlanGraph = clazzLPP;
+		this.expertModuleId = clazzLPP.getExpertModuleId();
+		this.name = clazzLPP.getName();
+	}
+	
+	public Integer numberOfStudentsDoing() {
+		return this.studentsIds.size();
+	}
+	
+	public Integer getId() {
+		return id;
+	}
+	public Double getGeneralScore() {
+		return generalScore;
+	}
+	public Integer getNumberOfStudentsDone() {
+		return numberOfStudentsDone;
+	}
+	public Integer getNumberOfStudentsBlocked() {
+		return numberOfStudentsBlocked;
+	}
+	public Integer getExpertModuleId() {
+		return expertModuleId;
+	}
+	public String getName() {
+		return name;
+	}
+	
 	
 	
 	@Override

@@ -8,6 +8,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
+import br.com.sembous.teachermoduleapi.dto.ClazzDto;
 import br.com.sembous.teachermoduleapi.dto.ClazzSimpleDto;
 import br.com.sembous.teachermoduleapi.form.ClazzForm;
 import br.com.sembous.teachermoduleapi.model.Clazz;
@@ -17,7 +18,7 @@ public class ClazzGateway {
 	private final RestTemplate restTemplate;
 	private final String baseUrl = "http://localhost:8084/class";
 	
-	public ClazzGateway(RestTemplate restTemplate) {
+	ClazzGateway(RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
 	}
 
@@ -52,5 +53,23 @@ public class ClazzGateway {
 			if (e.getStatusCode().equals(HttpStatus.NOT_FOUND)) return Boolean.FALSE;
 			else throw e;
 		}
+	}
+
+
+	public Optional<Clazz> get(Integer id) {
+		String url = this.baseUrl + "/" + id.toString();
+		Clazz clazz;
+		try {
+			ResponseEntity<ClazzDto> re = this.restTemplate.getForEntity(url, ClazzDto.class);
+			ClazzDto dto = re.getBody();
+			clazz = dto.convert();
+		} catch (ResourceAccessException e) {
+			clazz = null;
+		} catch (HttpClientErrorException e) {
+			if (e.getStatusCode().equals(HttpStatus.NOT_FOUND)) clazz = null;
+			else throw e;
+		}
+		
+		return Optional.ofNullable(clazz);
 	}
 }

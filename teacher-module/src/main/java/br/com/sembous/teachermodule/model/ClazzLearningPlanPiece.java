@@ -41,11 +41,14 @@ public class ClazzLearningPlanPiece {
 	@Enumerated(EnumType.STRING)
 	private KnowledgeType type;
 	
+	@Column(name = "expert_module_id")
+	private Integer expertModuleId;
+	
 	@Enumerated(EnumType.STRING)
 	private KnowledgeCategory category;
 	
 	private String name;
-	
+
 	
 	@Enumerated(EnumType.STRING)
 	private Applicability applicability;
@@ -61,6 +64,38 @@ public class ClazzLearningPlanPiece {
 	private Integer numberOfStudentsBlocked = Integer.valueOf(0);
 	
 	
+	public ClazzLearningPlanPiece() {	}
+	public ClazzLearningPlanPiece(List<ClazzLearningPlanPiece> childLPP, KnowledgeType type, Integer expertModuleId, KnowledgeCategory category, 
+			String name) {	
+		childLPP.forEach(this::addChild);
+		this.applicability = Applicability.ALL;
+		this.type = type;
+		this.expertModuleId = expertModuleId;
+		this.category = category;
+		this.name = name;
+	}
+	
+	
+	void setFather(ClazzLearningPlanPiece father) {
+		this.father = father;
+	}
+	
+	
+	public Integer getId() {
+		return id;
+	}
+	public String getName() {
+		return name;
+	}
+	public Integer getExpertModuleId() {
+		return expertModuleId;
+	}
+	
+	
+	private void addChild(ClazzLearningPlanPiece childLPP) {
+		childLPP.setFather(this);
+		this.childLPP.add(childLPP);
+	}
 	
 	@Override
 	public int hashCode() {

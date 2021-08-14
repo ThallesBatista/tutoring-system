@@ -1,0 +1,200 @@
+<html>
+<head th:replace="~{base :: head}"></head>
+<body onload="onLoad()">
+	<div th:replace="~{base :: logo}"></div>
+	<div th:replace="~{base :: navbar('class')}"></div>
+	<div class="container" id="core">
+		
+		{{clazz}}
+		<br>
+		{{learningPlans}}
+		
+		<div class="card mt-2 mb-3">
+			<div class="card-body row align-items-center col-md-10 offset-md-1">
+				<div class="col-2">
+					<h5 class="card-title">{{clazz.name}}</h5>
+				</div>
+				<div class="col">
+					<span class="card-text">{{'Número de estudantes:   ' + clazz.numberOfStudents}}</span>
+					<br>
+					<span class="card-text">{{'Número de planos de estudo:   ' + clazz.numberOfLearningPlans}}</span>
+					<br>
+					<span class="card-text">{{'Turma criada em:   ' + clazz.createdAt}}</span>
+					<br>
+					<br>
+					<br>
+					<div class="row justify-content-between align-items-center">
+						<button type="button" class="btn btn-danger col-3" data-bs-toggle="modal" data-bs-target="#remove">
+	 							EXCLUIR
+						</button>
+						<button v-on:click="addLP()" type="button" class="btn btn-warning col-3">ADICIONAR PLANO DE ESTUDOS</button>
+						<button v-on:click="addStudent()" type="button" class="btn btn-success col-3">ADICIONAR ESTUDANTE</button>
+					</div>
+				</div> 
+			</div>			
+		</div>	
+		
+		<!-- 		Modal de Exlusão da Turma     -->
+		<div class="modal fade" id="remove" tabindex="-1">
+		  	<div class="modal-dialog">
+		    	<div class="modal-content">
+		      		<div class="modal-header">
+		        		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		      		</div>
+		      		<div class="modal-body align-self-center align-items-center">
+		      			<span class="card-text">{{'Tem certeza que deseja excluir a turma ' + clazz.name + '?'}}</span>
+		      			<br>
+		      			<br>
+		      			<div class="row justify-content-between align-items-center">
+		      				<button type="button" class="btn btn-success btm-sm col-3" 
+		      				data-bs-dismiss="modal" aria-label="Close">NÃO</button>
+		      				<button v-on:click="excludeClass()" type="button" class="btn btn-danger btm-sm col-3" 
+		      				data-bs-dismiss="modal" aria-label="Close">SIM</button>
+		      			</div>
+		      		</div>
+		    	</div>
+		  	</div>
+		</div>
+		
+		
+<!-- 		Learning Plans -->
+		<div v-if="learningPlans.length!=0" class="card mt-5 mb-3">
+			<div class="card-header text-center align-items-center"><h4>Planos de Estudos</h4></div>
+			
+			<div id="carouselClasses" class="carousel slide" data-bs-ride="carousel">
+	  			<div class="carousel-inner">
+	  				<div v-for="learningPlan in learningPlans" 
+	  					v-bind:class="(learningPlans.indexOf(learningPlan)==0) ? 'carousel-item active' : 'carousel-item'">
+
+	  					<div class="card-body row align-items-center col-md-10 offset-md-1">
+  							<div class="col-2">
+  								<h5 class="card-title">{{learningPlan.name}}</h5>
+  								<small class="card-subtitle mb-2 text-muted">{{learningPlanId2TopicName[learningPlan.id]}}</small>
+  							</div>
+  							<div class="col">
+								<span class="card-text col-3">{{'Número de estudantes:   ' + learningPlan.numberOfStudents}}</span>
+								<br>
+								<span class="card-text col-3">{{'Número de estudantes que concluíram:   ' + learningPlan.numberOfStudentsDone}}</span>
+								<br>
+								<span class="card-text col-3">{{'Número de estudantes bloqueados:   ' + learningPlan.numberOfStudentsBlocked}}</span>
+								<br>
+								<span class="card-text col-3">{{'Score geral:   ' + learningPlan.generalScore}}</span>
+								<br>
+								<br>
+								<br>
+								<div class="row justify-content-between align-items-center">
+<!-- 									<button v-on:click="excludeClass(clazz.id)" type="button" class="btn btn-danger col-3">EXCLUIR</button> -->
+									<button v-on:click="selectLearningPlanToExlude(learningPlan)" type="button" class="btn btn-danger col-3" data-bs-toggle="modal" data-bs-target="#removeLP">
+			  							EXCLUIR
+									</button>
+									<button v-on:click="selectLearningPlan(learningPlan.id)" type="button" class="btn btn-warning col-3">DETALHES</button>
+<!-- 									<button v-on:click="studentsOfClass(clazz.id)" type="button" class="btn btn-success col-3">ESTUDANTES</button> -->
+								</div>
+			  				</div> 
+  						</div>
+  				
+	  				</div>	  				
+	 			</div>
+	  			<button class="carousel-control-prev" type="button" data-bs-target="#carouselClasses" data-bs-slide="prev">
+	    			<span class="carousel-control-prev-icon"></span>
+	    			<span class="visually-hidden">Previous</span>
+	  			</button>
+	  			<button class="carousel-control-next" type="button" data-bs-target="#carouselClasses" data-bs-slide="next">
+	    			<span class="carousel-control-next-icon"></span>
+	    			<span class="visually-hidden">Next</span>
+	  			</button>
+			</div>
+			
+		</div>
+		
+		
+		<!-- 		Modal de Exlusão da lp     -->
+		<div class="modal fade" id="removeLP" tabindex="-1">
+		  	<div class="modal-dialog">
+		    	<div class="modal-content">
+		      		<div class="modal-header">
+		        		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		      		</div>
+		      		<div class="modal-body align-self-center align-items-center">
+		      			<span class="card-text">{{'Tem certeza que deseja excluir o plano de estudos ' + learningPlanToExclude.name + '?'}}</span>
+		      			<br>
+		      			<br>
+		      			<div class="row justify-content-between align-items-center">
+		      				<button v-on:click="dontExcludeLearningPlan()" type="button" class="btn btn-success btm-sm col-3" 
+		      				data-bs-dismiss="modal" aria-label="Close">NÃO</button>
+		      				<button v-on:click="excludeLearningPlan(learningPlanToExclude.id)" type="button" class="btn btn-danger btm-sm col-3" 
+		      				data-bs-dismiss="modal" aria-label="Close">SIM</button>
+		      			</div>
+		      		</div>
+		    	</div>
+		  	</div>
+		</div>
+		
+		
+		
+	</div>
+	<script>
+		function onLoad() {
+			var app = new Vue(
+			{
+				el : '#core',
+				data : {clazz: {}, learningPlans: [], learningPlanId2TopicName: {}, learningPlanToExclude: {}},
+				mounted () {
+					axios
+				      .get('http://localhost:8083/api/class')
+				      .then(response => {
+				    	  	this.clazz = response.data;
+				    	  	this.learningPlans = response.data.learningPlans;
+				    	});
+// 					axios
+// 				      .get('http://localhost:8083/api/class/learningPlans')
+// 				      .then(response => {
+// 				    	  	this.learningPlans = response.data;
+// 				    	});
+// 					axios
+// 				      .get('http://localhost:8083/api/class/learningPlanId2TopicName')
+// 				      .then(response => {
+// 				    	  	this.learningPlanId2TopicName = response.data;
+// 				    	});
+				},
+				methods: {
+					addLP : function() {
+						window.location.href = 'http://localhost:8083/content';
+					},
+					addStudent : function() {
+						console.log('addStudent');
+					},
+					excludeClass : function() {
+						axios
+							.delete('http://localhost:8083/api/class')
+					      	.then(response => {
+					    	  	window.location.href = 'http://localhost:8083/dashboard';
+					    	})
+					      	.catch(window.location.href = ('http://localhost:8083/class/' + this.clazz.id));
+					},
+					selectLearningPlanToExlude : function(learningPlan) {
+						this.learningPlanToExclude = learningPlan;
+					},
+					dontExcludeLearningPlan : function() {
+						this.learningPlanToExclude = {};
+					},
+					excludeLearningPlan : function(id) {
+						axios
+							.delete('http://localhost:8083/api/class/learningPlan/' + id)
+				      		.then(response => {
+				    	  		window.location.href = ('http://localhost:8083/class/' + clazz.id);
+				    		})
+				      		.catch(window.location.href = ('http://localhost:8083/class/' + this.clazz.id));
+					},
+					selectLearningPlan : function(id) {
+						console.log('selectLP');
+// 						window.location.href = 'http://localhost:8083/class/' + id;
+					}
+				}
+			});
+		}
+	</script>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</body>
+</html>

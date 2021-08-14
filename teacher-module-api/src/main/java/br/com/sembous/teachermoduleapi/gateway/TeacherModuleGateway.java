@@ -11,4 +11,8 @@ public interface TeacherModuleGateway {
 	public static ClazzGateway getClazzGateway(RestTemplate restTemplate) {
 		return new ClazzGateway(restTemplate);
 	}
+	
+	public static ClazzLearningPlanGateway getClazzLearningPlanGateway(RestTemplate restTemplate) {
+		return new ClazzLearningPlanGateway(restTemplate);
+	}
 }
