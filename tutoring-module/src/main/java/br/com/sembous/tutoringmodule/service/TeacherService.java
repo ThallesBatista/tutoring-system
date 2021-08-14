@@ -38,9 +38,9 @@ public class TeacherService {
 		clazzGateway.create(clazz, teacherId);
 	}
 
-	public void removeClass(Integer id) {
+	public Boolean removeClass(Integer id) {
 		ClazzGateway clazzGateway = TeacherModuleGateway.getClazzGateway(restTemplate);		
-		clazzGateway.remove(id);
+		return clazzGateway.remove(id);
 	}
 
 	public Optional<Clazz> getClazz(Integer classId) {
@@ -57,6 +57,11 @@ public class TeacherService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public Boolean removeLearningPlan(Integer learningPlanId) {
+		ClazzLearningPlanGateway clp = TeacherModuleGateway.getClazzLearningPlanGateway(restTemplate);
+		return clp.remove(learningPlanId);
 	}
 
 }

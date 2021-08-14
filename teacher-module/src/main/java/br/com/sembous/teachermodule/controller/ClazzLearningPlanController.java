@@ -8,6 +8,8 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +22,7 @@ import br.com.sembous.teachermodule.form.ClazzLearningPlanPieceForm;
 import br.com.sembous.teachermodule.model.Clazz;
 import br.com.sembous.teachermodule.model.ClazzLearningPlan;
 import br.com.sembous.teachermodule.model.ClazzLearningPlanPiece;
+import br.com.sembous.teachermodule.repository.ClazzLearningPlanRepository;
 import br.com.sembous.teachermodule.repository.ClazzRepository;
 
 @RestController
@@ -28,6 +31,9 @@ public class ClazzLearningPlanController {
 	
 	@Autowired
 	private ClazzRepository clazzRepository;
+	
+	@Autowired
+	private ClazzLearningPlanRepository clazzLearningPlanRepository;
 	
 	@PostMapping
 	@Transactional
@@ -43,6 +49,15 @@ public class ClazzLearningPlanController {
 		URI uri = uriBuilder.path("classLearningPlan/{id}").buildAndExpand(learningPlan.getId()).toUri();
 		
 		return ResponseEntity.created(uri).body(new ClazzLearningPlanSimpleDto(learningPlan));
+	}
+	
+	@DeleteMapping(path = "{id}")
+	@Transactional
+	public ResponseEntity<?> delete(@PathVariable(required = true, name = "id") Integer id) {
+		Optional<ClazzLearningPlan> optional = clazzLearningPlanRepository.findById(id);
+		if (optional.isEmpty()) return ResponseEntity.notFound().build();
+		clazzLearningPlanRepository.deleteById(id);
+		return ResponseEntity.ok().build();
 	}
 
 }

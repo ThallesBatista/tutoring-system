@@ -41,4 +41,17 @@ public class ClazzLearningPlanGateway {
 		
 	}
 
+	public Boolean remove(Integer learningPlanId) {
+		String url = this.baseUrl + "/" + learningPlanId.toString();
+		try {
+			this.restTemplate.delete(url);
+			return Boolean.TRUE;
+		} catch (ResourceAccessException e) {
+			return Boolean.FALSE;
+		} catch (HttpClientErrorException e) {
+			if (e.getStatusCode().equals(HttpStatus.NOT_FOUND)) return Boolean.FALSE;
+			else throw e;
+		}
+	}
+
 }

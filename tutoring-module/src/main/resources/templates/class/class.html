@@ -141,7 +141,7 @@
 				data : {clazz: {}, learningPlans: [], learningPlanId2TopicName: {}, learningPlanToExclude: {}},
 				mounted () {
 					axios
-				      .get('http://localhost:8083/api/class/class')
+				      .get('http://localhost:8083/api/class')
 				      .then(response => {
 				    	  	this.clazz = response.data;
 				    	  	this.learningPlans = response.data.learningPlans;
@@ -165,7 +165,12 @@
 						console.log('addStudent');
 					},
 					excludeClass : function() {
-						console.log('excludeClass');
+						axios
+							.delete('http://localhost:8083/api/class')
+					      	.then(response => {
+					    	  	window.location.href = 'http://localhost:8083/dashboard';
+					    	})
+					      	.catch(window.location.href = ('http://localhost:8083/class/' + this.clazz.id));
 					},
 					selectLearningPlanToExlude : function(learningPlan) {
 						this.learningPlanToExclude = learningPlan;
@@ -174,11 +179,12 @@
 						this.learningPlanToExclude = {};
 					},
 					excludeLearningPlan : function(id) {
-						console.log('excludeLP')
-// 						axios.delete('http://localhost:8083/api/teacherDashboard/class/' + id)
-// 					      .then(response => {
-// 					    	  window.location.href = 'http://localhost:8083/dashboard'
-// 					      });
+						axios
+							.delete('http://localhost:8083/api/class/learningPlan/' + id)
+				      		.then(response => {
+				    	  		window.location.href = ('http://localhost:8083/class/' + clazz.id);
+				    		})
+				      		.catch(window.location.href = ('http://localhost:8083/class/' + this.clazz.id));
 					},
 					selectLearningPlan : function(id) {
 						console.log('selectLP');

@@ -6,7 +6,9 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +23,7 @@ public class ClassRestController {
 	@Autowired
 	TeacherService teacherService;
 
-	@GetMapping(path = "/class")
+	@GetMapping
 	public ResponseEntity<ClazzDto> getClazz(HttpSession session){
 		Integer classId = (Integer) session.getAttribute("classId");
 		Optional<Clazz> optional = teacherService.getClazz(classId);
@@ -29,4 +31,23 @@ public class ClassRestController {
 				
 		return ResponseEntity.ok(new ClazzDto(optional.get()));
 	}
+	
+	@DeleteMapping
+	public ResponseEntity<?> removeClazz(HttpSession session) {
+		Integer classId = (Integer) session.getAttribute("classId");
+		Boolean classRemoved = teacherService.removeClass(classId);
+		if (classRemoved) {
+			session.removeAttribute("classId");;
+			return ResponseEntity.ok().build();
+		}
+		else return ResponseEntity.internalServerError().build();
+	}
+	
+	@DeleteMapping(path="/learningPlan/{id}")
+	public ResponseEntity<?> removeLearningPlan(@PathVariable(required = true, name = "id") Integer learningPlanId) {
+		Boolean learningPlanRemoved = teacherService.removeLearningPlan(learningPlanId);
+		if (learningPlanRemoved) return ResponseEntity.ok().build();
+		else return ResponseEntity.internalServerError().build();
+	}
+	
 }
